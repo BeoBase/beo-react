@@ -2,7 +2,16 @@ name: Jira Convention Check
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+concurrency:
+  group: jira-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   jira-check:
     runs-on: ubuntu-latest
@@ -16,7 +25,7 @@ jobs:
       - name: Check branch name
         run: |
           BRANCH="${{ github.head_ref }}"
-            
+          
           echo "Checking branch: $BRANCH"
           
           if [[ ! "$BRANCH" =~ BEO-[0-9]+ ]]; then
@@ -24,7 +33,7 @@ jobs:
             echo "Example: feature/BEO-475-add-login"
             exit 1
           fi
-            
+          
           echo "✅ Branch name OK"
 
       - name: Check commit messages
@@ -32,9 +41,9 @@ jobs:
           echo "Checking commits..."
           
           COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --no-merges --pretty=format:"%s")
-            
+          
           echo "$COMMITS"
-            
+          
           while IFS= read -r commit
             do
               if [[ ! "$commit" =~ ^BEO-[0-9]+:\ .+ ]]; then
@@ -46,7 +55,7 @@ jobs:
                 exit 1
               fi
             done <<< "$COMMITS"
-            
+          
             echo "✅ Commit messages OK"
 
       - name: Check PR title
