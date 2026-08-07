@@ -34,19 +34,19 @@ export default function Documentation() {
         
         <li>
           <a
-            href="https://github.com/Finora-2026"
+            href="https://github.com/BeoBase"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-black hover:underline"
           >
             <FaGithub />
-            Finora
+            Beo Base
           </a>
         </li>
         
         <li>
           <a
-            href="https://bellamyphan.atlassian.net/wiki/spaces/F2/pages/56983553/Finora+2026+Project+Overview"
+            href="https://bellamyphan.atlassian.net/wiki/spaces/BB/overview"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-black hover:underline"

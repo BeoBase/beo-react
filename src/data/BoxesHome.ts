@@ -1,5 +1,30 @@
 export const boxesHomeData = [
   {
+    title: 'Developments',
+    buttons: [
+      {
+        label: 'Jira Board',
+        href: 'https://bellamyphan.atlassian.net/jira/software/projects/BEO/boards/139/backlog',
+      },
+      {
+        label: 'Confluence Home',
+        href: 'https://bellamyphan.atlassian.net/wiki/spaces/BB/overview',
+      },
+      {
+        label: 'React Github',
+        href: 'https://github.com/BeoBase/beo-react',
+      },
+      {
+        label: 'Spring Github',
+        href: 'https://github.com/BeoBase/beo-spring',
+      },
+      {
+        label: 'Database Github',
+        href: 'https://github.com/BeoBase/beo-database',
+      },
+    ]
+  },
+  {
     title: 'Cashflow Tracking',
     buttons: [
       {
@@ -93,31 +118,6 @@ export const boxesHomeData = [
       {
         label: 'Game 2',
         href: 'linkher2.com',
-      },
-    ]
-  },
-  {
-    title: 'Developments',
-    buttons: [
-      {
-        label: 'Jira Board',
-        href: 'https://bellamyphan.atlassian.net/jira/software/projects/BB/boards/137/backlog',
-      },
-      {
-        label: 'Confluence Home',
-        href: 'https://bellamyphan.atlassian.net/wiki/spaces/BB/overview',
-      },
-      {
-        label: 'React Github',
-        href: 'https://github.com/BeoBase/beo-react',
-      },
-      {
-        label: 'Spring Github',
-        href: 'https://github.com/BeoBase/beo-spring',
-      },
-      {
-        label: 'Config Github',
-        href: 'https://github.com/BeoBase/beo-config',
       },
     ]
   },
