@@ -28,6 +28,10 @@ function App() {
         >
           Count is {count}
         </button>
+
+        <button className="text-blue-600 bg-blue-200">
+          Tailwind Button
+        </button>
       </section>
 
       <div className="ticks"></div>
