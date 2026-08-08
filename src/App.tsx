@@ -4,6 +4,8 @@ import FooterMain from "./components/footer/FooterMain.tsx";
 import NavbarMain from "./components/navbar/NavbarMain.tsx";
 
 import Home from "./pages/Home.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import SignIn from "./pages/SignIn.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home/>}/>
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-in" element={<SignIn />} />
         
         {/* Protected Routes - Generated Dynamically */}
         
