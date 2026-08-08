@@ -40,7 +40,7 @@ describe("NavbarMain", () => {
 
     expect(homeLink).toHaveAttribute("href", "/");
     expect(portfolioLink).toHaveAttribute("href", "/portfolio");
-    expect(loginLink).toHaveAttribute("href", "/login");
+    expect(loginLink).toHaveAttribute("href", "/sign-in");
   });
 
 });
