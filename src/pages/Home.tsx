@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import Documentation from "../components/footer/Documentation.tsx";
 import Connect from "../components/footer/Connect.tsx";
@@ -10,6 +10,10 @@ import {boxesHomeData} from "../data/BoxesHome.ts";
 export default function Home() {
   
   const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    document.title = "Beo Base | Home";
+  }, []);
   
   return (
     <>

@@ -5,11 +5,13 @@ import {
   FaGithub,
 } from "react-icons/fa";
 
+import Card from "../ui/Card";
+
 import myResume from "../../assets/BellamyPhan_Resume.pdf";
 
 export default function Documentation() {
   return (
-    <div className="rounded-3xl border border-white/10 bg-slate-900/30 p-6 shadow-xl backdrop-blur-sm">
+    <Card>
       <div className="mb-4 flex items-center gap-3">
         <FaFolderOpen className="text-4xl text-black" />
         <div className="text-white text-2xl font-bold">Documentation</div>
@@ -25,7 +27,7 @@ export default function Documentation() {
             href="https://github.com/bellamyphan"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-black hover:underline"
+            className="flex items-center gap-2 text-stone-300 hover:underline"
           >
             <FaGithub />
             Bellamy
@@ -37,7 +39,7 @@ export default function Documentation() {
             href="https://github.com/BeoBase"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-black hover:underline"
+            className="flex items-center gap-2 text-stone-300 hover:underline"
           >
             <FaGithub />
             Beo Base
@@ -49,7 +51,7 @@ export default function Documentation() {
             href="https://bellamyphan.atlassian.net/wiki/spaces/BB/overview"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-black hover:underline"
+            className="flex items-center gap-2 text-stone-300 hover:underline"
           >
             <FaBook />
             Confluence
@@ -61,13 +63,13 @@ export default function Documentation() {
             href={myResume}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-black hover:underline"
+            className="flex items-center gap-2 text-stone-300 hover:underline"
           >
             <FaFileAlt />
             Resume
           </a>
         </li>
       </ul>
-    </div>
+    </Card>
   );
 }

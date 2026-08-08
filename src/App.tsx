@@ -1,10 +1,10 @@
 import {Route, Routes} from "react-router-dom";
 
-import Home from "./pages/Home.tsx";
 import FooterMain from "./components/footer/FooterMain.tsx";
 import NavbarMain from "./components/navbar/NavbarMain.tsx";
 
-import './App.css'
+import Home from "./pages/Home.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
 
@@ -17,7 +17,13 @@ function App() {
       <NavbarMain/>
       
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home/>}/>
+        
+        {/* Protected Routes - Generated Dynamically */}
+        
+        {/* Handle error and all pages */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       
       <FooterMain/>

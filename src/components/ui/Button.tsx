@@ -21,7 +21,7 @@ export default function Button({
   return (
     <button
       className={`
-        px-4 py-2 rounded-md transition-colors
+        px-4 py-2 rounded-2xl transition-colors font-medium
         disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none
         ${styles[variant]}
         ${className}

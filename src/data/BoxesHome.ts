@@ -33,11 +33,11 @@ export const boxesHomeData = [
       },
       {
         label: 'Bank',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
       {
         label: 'Budget',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
     ]
   },
@@ -46,23 +46,23 @@ export const boxesHomeData = [
     buttons: [
       {
         label: 'Credit Card',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Personal Loan',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Student Loan',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Car Loan',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Mortgage',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
     ]
   },
@@ -71,27 +71,27 @@ export const boxesHomeData = [
     buttons: [
       {
         label: 'Credit Score',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
       {
         label: 'Investment',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
       {
         label: 'Net Worth',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
       {
         label: 'Home',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Car',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Boat',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
     ]
   },
@@ -100,11 +100,11 @@ export const boxesHomeData = [
     buttons: [
       {
         label: 'Local Model',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Cloud Model',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
     ]
   },
@@ -113,11 +113,11 @@ export const boxesHomeData = [
     buttons: [
       {
         label: 'Game 1',
-        href: 'linkhere.com',
+        to: 'linkhere.com',
       },
       {
         label: 'Game 2',
-        href: 'linkher2.com',
+        to: 'linkher2.com',
       },
     ]
   },
