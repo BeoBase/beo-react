@@ -15,6 +15,7 @@ export default function NavbarMain() {
         <div className="flex items-center gap-6">
           <AppLink to="/">Home</AppLink>
           <AppLink to="/portfolio">Portfolio</AppLink>
+          <AppLink to="/dev">Development</AppLink>
         </div>
         
         {/* Right - Actions */}
