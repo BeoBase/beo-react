@@ -1,3 +1,5 @@
+# .gitignore
+
 # Logs
 logs
 *.log
@@ -25,3 +27,8 @@ dist-ssr
 
 # Ignore testing coverage files
 coverage/
+
+# Do not include .env files
+.env
+.env.local
+.env.*.local
