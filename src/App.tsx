@@ -32,6 +32,7 @@ function App() {
         
         {/* Handle error and all pages */}
         <Route path="*" element={<NotFound />} />
+
       </Routes>
       
       <FooterMain/>
