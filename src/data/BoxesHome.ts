@@ -28,6 +28,10 @@ export const boxesHomeData = [
     title: 'Cashflow Tracking',
     buttons: [
       {
+        label: '[TEMP] Quiz Page',
+        to: 'quiz',
+      },
+      {
         label: 'Transaction',
         to: 'linkhere.com',
       },
