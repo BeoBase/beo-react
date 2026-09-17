@@ -28,7 +28,7 @@ export const boxesHomeData = [
     title: 'Cashflow Tracking',
     buttons: [
       {
-        label: '[TEMP] Quiz Page',
+        label: '[TEMP] React Quiz',
         to: 'quiz',
       },
       {
