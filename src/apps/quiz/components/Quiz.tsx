@@ -1,7 +1,8 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 
 import QUESTIONS from '../data/questions.js';
 import quizCompleteImg from '../assets/quiz-complete.png';
+import QuestionTime from './QuestionTimer.tsx';
 
 function shuffleAnswers(answers: string[]) {
   const shuffled = [...answers];
@@ -27,11 +28,16 @@ export default function Quiz() {
     setShuffledAnswers(shuffleAnswers(QUESTIONS[activeQuestionIndex].answers));
   }, [activeQuestionIndex, quizIsComplete]);
 
-  function handleSelectAnswer(selectedAnswer: string) {
-    setUserAnswers((prevUserAnswers) => {
-      return [...prevUserAnswers, selectedAnswer];
-    });
-  }
+  const handleSelectAnswer = useCallback((selectedAnswer: string) => {
+    setUserAnswers((prevUserAnswers) => [
+      ...prevUserAnswers,
+      selectedAnswer,
+    ]);
+  }, []);
+
+  const handleSkipAnswer = useCallback(() => {
+    handleSelectAnswer("");
+  }, [handleSelectAnswer]);
 
   if (quizIsComplete) {
     return <div className="mx-auto mt-8 mb-8 flex w-full max-w-2xl flex-col items-center rounded-2xl border border-white/20 bg-black/20 p-10 text-center shadow-lg backdrop-blur-2xl">
@@ -53,6 +59,11 @@ export default function Quiz() {
 
   return (
     <div className="mx-auto mt-8 mb-8 w-full max-w-2xl rounded-2xl border border-white/20 bg-black/20 p-8 shadow-lg backdrop-blur-2xl">
+      <QuestionTime
+        key={activeQuestionIndex}
+        timeout={10000}
+        onTimeout={handleSkipAnswer}
+      />
       <h2 className="mb-6 text-2xl font-bold text-gray-800">
         {QUESTIONS[activeQuestionIndex].text}
       </h2>
