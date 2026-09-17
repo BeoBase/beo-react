@@ -10,6 +10,8 @@ import Development from "./pages/Development.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+import QuizPage from "./apps/quiz/pages/QuizPage.tsx"
+
 function App() {
 
   return (
@@ -27,6 +29,7 @@ function App() {
         <Route path="/portfolio" element={<Portfolio />}/>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/quiz" element={<QuizPage />} />
         
         {/* Protected Routes - Generated Dynamically */}
         
