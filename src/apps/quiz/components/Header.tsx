@@ -1,6 +1,7 @@
 
 import logoImg from '../assets/quiz-logo.png';
 
+// Comment here to trigger github action
 export default function Header() {
     return <>
         <header className="text-center">
