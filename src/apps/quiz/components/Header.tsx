@@ -1,8 +1,6 @@
 
 import logoImg from '../assets/quiz-logo.png';
 
-// testing comment here
-// another testing comment here, safe to delete those
 export default function Header() {
     return <>
         <header className="text-center">
