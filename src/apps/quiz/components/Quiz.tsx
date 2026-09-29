@@ -7,30 +7,15 @@ import Question from "./Question.tsx";
 export default function Quiz() {
 
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [answerState, setAnswerState] = useState('');
-
-  const activeQuestionIndex = answerState === '' ? userAnswers.length : userAnswers.length - 1;
+  const activeQuestionIndex = userAnswers.length;
   const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
 
   const handleSelectAnswer = useCallback((selectedAnswer: string) => {
-    setAnswerState('answered');
     setUserAnswers((prevUserAnswers) => [
       ...prevUserAnswers,
       selectedAnswer,
     ]);
-
-    setTimeout(() => {
-      if (selectedAnswer === QUESTIONS[activeQuestionIndex].answers[0]) {
-        setAnswerState('correct');
-      } else {
-        setAnswerState('wrong');
-      }
-
-      setTimeout(() => {
-        setAnswerState('');
-      }, 2000);
-    }, 1000);
-  }, [activeQuestionIndex]);
+  }, []);
 
   const handleSkipAnswer = useCallback(() => {
     handleSelectAnswer("");
@@ -56,10 +41,7 @@ export default function Quiz() {
 
   return <Question
     key={activeQuestionIndex}
-    questionText={QUESTIONS[activeQuestionIndex].text}
-    answers={QUESTIONS[activeQuestionIndex].answers}
-    selectedAnswer={userAnswers[userAnswers.length - 1]}
-    answerState={answerState}
+    questionIndex={activeQuestionIndex}
     onSelectAnswer={handleSelectAnswer}
     onSkipAnswer={handleSkipAnswer}
   />
