@@ -23,19 +23,8 @@ export default function Question({
     isCorrect: null,
   });
 
-  function handleSelectAnswer(answer: string) {
-    setAnswer({selectedAnswer: answer, isCorrect: null})
-
-    setTimeout(() => {
-      setAnswer({
-        selectedAnswer: answer,
-        isCorrect: QUESTIONS[questionIndex].answers[0] === answer
-      });
-
-      setTimeout(() => {
-        onSelectAnswer(answer);
-      }, 2000)
-    }, 1000)
+  function handleSelectAnswer(selected: string) {
+    setAnswer({selectedAnswer: selected, isCorrect: null});
   }
 
   let answerState: AnswerState = '';
@@ -45,10 +34,33 @@ export default function Question({
     answerState = 'answered';
   }
 
+  const TIMEOUTS: Record<AnswerState, number> = {
+    '': 10000,       // waiting for an answer
+    answered: 1000,  // highlight the selected answer
+    correct: 2000,   // reveal right / wrong
+    wrong: 2000,
+  };
+
+  // The timer drives every phase: skip -> reveal result -> move on.
+  function handleTimeout() {
+    if (answerState === '') {
+      onSkipAnswer();
+    } else if (answerState === 'answered') {
+      setAnswer((prev) => ({
+        ...prev,
+        isCorrect: QUESTIONS[questionIndex].answers[0] === prev.selectedAnswer,
+      }));
+    } else {
+      onSelectAnswer(answer.selectedAnswer);
+    }
+  }
+
   return <div className="mx-auto mt-8 mb-8 w-full max-w-2xl rounded-2xl border border-white/20 bg-black/20 p-8 shadow-lg backdrop-blur-2xl">
     <QuestionTime
-      timeout={10000}
-      onTimeout={onSkipAnswer}
+      key={answerState}
+      timeout={TIMEOUTS[answerState]}
+      onTimeout={handleTimeout}
+      mode={answerState}
     />
     <h2 className="mb-6 text-2xl font-bold text-gray-800">
       {QUESTIONS[questionIndex].text}
