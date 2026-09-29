@@ -1,39 +1,51 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useState, useMemo} from "react";
 
 import QUESTIONS from '../data/questions.js';
 import quizCompleteImg from '../assets/quiz-complete.png';
 import QuestionTime from './QuestionTimer.tsx';
 
+// Fisher–Yates shuffle
 function shuffleAnswers(answers: string[]) {
   const shuffled = [...answers];
-  shuffled.sort(() => Math.random() - 0.5);
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   return shuffled;
 }
 
 export default function Quiz() {
 
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [shuffledAnswers, setShuffledAnswers] = useState<string[]>([]);
-  const shuffledForIndexRef = useRef(-1);
+  const [answerState, setAnswerState] = useState('');
 
-  const activeQuestionIndex = userAnswers.length;
+  const activeQuestionIndex = answerState === '' ? userAnswers.length : userAnswers.length - 1;
   const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
 
-  useEffect(() => {
-    if (quizIsComplete || shuffledForIndexRef.current === activeQuestionIndex) {
-      return;
-    }
-
-    shuffledForIndexRef.current = activeQuestionIndex;
-    setShuffledAnswers(shuffleAnswers(QUESTIONS[activeQuestionIndex].answers));
-  }, [activeQuestionIndex, quizIsComplete]);
+  const shuffledAnswers = useMemo(
+    () => (quizIsComplete ? [] : shuffleAnswers(QUESTIONS[activeQuestionIndex].answers)),
+    [activeQuestionIndex, quizIsComplete]
+  );
 
   const handleSelectAnswer = useCallback((selectedAnswer: string) => {
+    setAnswerState('answered');
     setUserAnswers((prevUserAnswers) => [
       ...prevUserAnswers,
       selectedAnswer,
     ]);
-  }, []);
+
+    setTimeout(() => {
+      if (selectedAnswer === QUESTIONS[activeQuestionIndex].answers[0]) {
+        setAnswerState('correct');
+      } else {
+        setAnswerState('wrong');
+      }
+
+      setTimeout(() => {
+        setAnswerState('');
+      }, 2000);
+    }, 1000);
+  }, [activeQuestionIndex]);
 
   const handleSkipAnswer = useCallback(() => {
     handleSelectAnswer("");
@@ -68,16 +80,28 @@ export default function Quiz() {
         {QUESTIONS[activeQuestionIndex].text}
       </h2>
       <ul className="space-y-3">
-        {shuffledAnswers.map((answer) => (
-          <li key={answer}>
+        {shuffledAnswers.map((answer) => {
+          const isSelected = userAnswers[userAnswers.length - 1] === answer;
+          const baseClasses = 'w-full rounded-lg px-5 py-3 text-left font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500';
+          let stateClasses = 'bg-gray-100 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700';
+
+          if (answerState === 'answered' && isSelected) {
+            stateClasses = 'bg-amber-400 text-gray-900';
+          } else if (answerState === 'correct' && isSelected) {
+            stateClasses = 'bg-green-500 text-white';
+          } else if (answerState === 'wrong' && isSelected) {
+            stateClasses = 'bg-red-500 text-white';
+          }
+
+          return  <li key={answer}>
             <button
               onClick={() => handleSelectAnswer(answer)}
-              className="w-full rounded-lg bg-gray-100 px-5 py-3 text-left font-medium text-gray-700 transition hover:bg-indigo-100 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`${baseClasses} ${stateClasses} disabled:cursor-not-allowed`}
             >
               {answer}
             </button>
           </li>
-        ))}
+        })}
       </ul>
     </div>
   );
