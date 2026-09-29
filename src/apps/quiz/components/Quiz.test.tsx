@@ -42,9 +42,11 @@ describe('Quiz', () => {
     ).toBeInTheDocument();
 
     // 1s (answered -> correct/wrong) + 2s (feedback) = 3s
-    act(() => {
-      vi.advanceTimersByTime(3000);
-    });
+    for (let i = 0; i < 30; i++) {
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+    }
 
     expect(
       screen.getByRole('heading', { name: QUESTIONS[1].text })
@@ -58,9 +60,11 @@ describe('Quiz', () => {
       screen.getByRole('button', { name: QUESTIONS[0].answers[0] })
     );
 
-    act(() => {
-      vi.advanceTimersByTime(3000);
-    });
+    for (let i = 0; i < 30; i++) {
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+    }
 
     QUESTIONS[1].answers.forEach((answer) => {
       expect(screen.getByRole('button', { name: answer })).toBeInTheDocument();

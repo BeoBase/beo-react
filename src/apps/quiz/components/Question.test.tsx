@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Question from './Question';
@@ -35,10 +35,8 @@ function renderQuestion() {
   return { onSelectAnswer, onSkipAnswer };
 }
 
-function advance(ms: number) {
-  act(() => {
-    vi.advanceTimersByTime(ms);
-  });
+function fireTimeout() {
+  fireEvent.click(screen.getByRole('button', { name: 'trigger-timeout' }));
 }
 
 describe('Question', () => {
@@ -96,7 +94,7 @@ describe('Question', () => {
       renderQuestion();
 
       fireEvent.click(screen.getByRole('button', { name: correctAnswer }));
-      advance(1000);
+      fireTimeout();
 
       expect(screen.getByRole('button', { name: correctAnswer })).toHaveClass('bg-green-500');
     });
@@ -105,31 +103,32 @@ describe('Question', () => {
       renderQuestion();
 
       fireEvent.click(screen.getByRole('button', { name: wrongAnswer }));
-      advance(1000);
+      fireTimeout();
 
       expect(screen.getByRole('button', { name: wrongAnswer })).toHaveClass('bg-red-500');
     });
 
-    it('stays in the "answered" state before the 1 second mark', () => {
+    it('stays in the "answered" state with a 1 second timer until it times out', () => {
       renderQuestion();
 
       fireEvent.click(screen.getByRole('button', { name: correctAnswer }));
-      advance(999);
 
+      expect(screen.getByTestId('timer')).toHaveAttribute('data-timeout', '1000');
       const button = screen.getByRole('button', { name: correctAnswer });
       expect(button).toHaveClass('bg-amber-400');
       expect(button).not.toHaveClass('bg-green-500');
     });
 
-    it('calls onSelectAnswer once, 3 seconds after the click', () => {
+    it('shows the result with a 2 second timer, then calls onSelectAnswer once', () => {
       const { onSelectAnswer } = renderQuestion();
 
       fireEvent.click(screen.getByRole('button', { name: wrongAnswer }));
+      fireTimeout();
 
-      advance(2999);
+      expect(screen.getByTestId('timer')).toHaveAttribute('data-timeout', '2000');
       expect(onSelectAnswer).not.toHaveBeenCalled();
 
-      advance(1);
+      fireTimeout();
       expect(onSelectAnswer).toHaveBeenCalledTimes(1);
       expect(onSelectAnswer).toHaveBeenCalledWith(wrongAnswer);
     });
@@ -138,7 +137,8 @@ describe('Question', () => {
       const { onSkipAnswer } = renderQuestion();
 
       fireEvent.click(screen.getByRole('button', { name: correctAnswer }));
-      advance(3000);
+      fireTimeout();
+      fireTimeout();
 
       expect(onSkipAnswer).not.toHaveBeenCalled();
     });
