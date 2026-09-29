@@ -41,6 +41,7 @@ export default function Answers({answers, selectedAnswer, answerState, onSelect}
           <button
             onClick={() => onSelect(answer)}
             className={`${baseClasses} ${stateClasses} disabled:cursor-not-allowed`}
+            disabled={answerState !== ''}
           >
             {answer}
           </button>
