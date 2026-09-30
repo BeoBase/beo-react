@@ -43,7 +43,7 @@ export default function Summary({
         return <li key={answer} className="my-8">
           <h3 className="mx-auto flex size-8 items-center justify-center rounded-full bg-[#2c203d] font-['Roboto_Condensed'] text-base text-[#d8cde8]">{index + 1}</h3>
           <p className="my-1 text-base text-stone-200">{QUESTIONS[index].text}</p>
-          <p className="my-1 font-['Roboto_Condensed'] font-bold text-stone-200">{answer}</p>
+          <p className="my-1 font-['Roboto_Condensed'] font-bold text-stone-200">{answer ?? 'Skipped'}</p>
         </li>
       })}
     </ol>
