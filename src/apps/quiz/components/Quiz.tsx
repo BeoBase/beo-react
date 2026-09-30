@@ -27,7 +27,7 @@ export default function Quiz() {
   }, []);
 
   if (quizIsComplete) {
-    return <Summary onRestart={handleRestartQuiz}/>;
+    return <Summary userAnswers={userAnswers} onRestart={handleRestartQuiz}/>;
   }
 
   return <Question
