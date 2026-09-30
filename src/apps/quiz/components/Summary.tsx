@@ -40,10 +40,19 @@ export default function Summary({
     </div>
     <ol className="mx-auto my-8 list-none p-0 text-center">
       {userAnswers.map((answer, index) => {
-        return <li key={answer} className="my-8">
+        let cssClass = "my-1 font-['Roboto_Condensed']";
+        if (!answer) {
+          cssClass += ' font-normal text-[#d1baf2]';
+        } else if (answer === QUESTIONS[index].answers[0]) {
+          cssClass += ' font-bold text-[#054e37]';
+        } else {
+          cssClass += ' font-bold text-[#730b4b]';
+        }
+
+        return <li key={index} className="my-8">
           <h3 className="mx-auto flex size-8 items-center justify-center rounded-full bg-[#2c203d] font-['Roboto_Condensed'] text-base text-[#d8cde8]">{index + 1}</h3>
           <p className="my-1 text-base text-stone-200">{QUESTIONS[index].text}</p>
-          <p className="my-1 font-['Roboto_Condensed'] font-bold text-stone-200">{answer ?? 'Skipped'}</p>
+          <p className={cssClass}>{answer || 'Skipped'}</p>
         </li>
       })}
     </ol>
