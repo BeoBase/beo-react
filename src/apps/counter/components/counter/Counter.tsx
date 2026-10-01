@@ -1,4 +1,4 @@
-import {useState, memo, useCallback} from 'react';
+import {useState, memo, useCallback, useMemo} from 'react';
 
 import IconButton from '../ui/IconButton.tsx';
 import MinusIcon from '../ui/icons/MinusIcon.tsx';
@@ -33,7 +33,8 @@ interface CounterProps {
 
 const Counter = memo(function Counter({ initialCount }: CounterProps) {
   log('<Counter /> rendered', 1);
-  const initialCountIsPrime = isPrime(initialCount);
+
+  const initialCountIsPrime = useMemo(() => isPrime(initialCount), [initialCount]);
 
   const [counter, setCounter] = useState(initialCount);
 
