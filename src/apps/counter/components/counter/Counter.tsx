@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import {useState, memo, useCallback} from 'react';
 
 import IconButton from '../ui/IconButton.tsx';
 import MinusIcon from '../ui/icons/MinusIcon.tsx';
@@ -37,13 +37,13 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
 
   const [counter, setCounter] = useState(initialCount);
 
-  function handleDecrement() {
+  const handleDecrement = useCallback(function handleDecrement() {
     setCounter((prevCounter) => prevCounter - 1);
-  }
+  }, []);
 
-  function handleIncrement() {
+  const handleIncrement = useCallback(function handleIncrement() {
     setCounter((prevCounter) => prevCounter + 1);
-  }
+  }, []);
 
   return (
     <section className="my-8 rounded-md border border-[#05827e] p-8">
