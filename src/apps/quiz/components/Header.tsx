@@ -3,7 +3,7 @@ import logoImg from '../assets/quiz-logo.png';
 
 export default function Header() {
     return <>
-        <header className="text-center">
+        <header className="pt-6 text-center">
             <img
               src={logoImg}
               alt="Quiz Logo"
