@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ComponentType, SVGProps } from 'react';
+import {type ComponentPropsWithoutRef, type ComponentType, memo, type SVGProps} from 'react';
 
 import { log } from '../../log.ts';
 
@@ -6,7 +6,7 @@ interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 }
 
-export default function IconButton({ children, icon, ...props }: IconButtonProps) {
+const IconButton = memo(function IconButton({ children, icon, ...props }: IconButtonProps) {
   log('<IconButton /> rendered', 2);
 
   const Icon = icon;
@@ -19,4 +19,6 @@ export default function IconButton({ children, icon, ...props }: IconButtonProps
       <span>{children}</span>
     </button>
   );
-}
+});
+
+export default IconButton;
