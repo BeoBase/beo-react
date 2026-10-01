@@ -46,12 +46,12 @@ export default function Counter({ initialCount }: CounterProps) {
   }
 
   return (
-    <section className="counter">
-      <p className="counter-info">
+    <section className="my-8 rounded-md border border-[#05827e] p-8">
+      <p className="block text-center text-[0.8rem] text-[#9dc5c4]">
         The initial counter value was <strong>{initialCount}</strong>. It{' '}
         <strong>is {initialCountIsPrime ? 'a' : 'not a'}</strong> prime number.
       </p>
-      <p>
+      <p className="mx-auto flex items-center justify-center gap-8 text-2xl">
         <IconButton icon={MinusIcon} onClick={handleDecrement}>
           Decrement
         </IconButton>
