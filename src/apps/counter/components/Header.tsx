@@ -2,7 +2,7 @@ import { log } from '../log.ts';
 import logoImg from '../assets/logo.png';
 
 export default function Header() {
-  log('<Header /> rendered', 1);
+  log('Counter <Header /> rendered', 1);
 
   return (
     <header id="main-header" className="mx-auto my-8 text-center font-['Lato'] text-[#87a7a4]">
