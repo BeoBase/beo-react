@@ -11,6 +11,7 @@ import Portfolio from "./pages/Portfolio.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 import QuizPage from "./apps/quiz/pages/QuizPage.tsx"
+import CounterPage from "./apps/counter/pages/CounterPage.tsx";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/counter" element={<CounterPage />} />
         
         {/* Protected Routes - Generated Dynamically */}
         
