@@ -5,12 +5,16 @@ import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
 
+// The React Compiler adds its own cache branches, which v8 counts as uncovered.
+// Turn it off for `npm run coverage` so the report measures the true source code.
+const isCoverage = process.env.COVERAGE === 'true';
+
 export default defineConfig({
   plugins: [
     react(),
-    babel({
+    ...(isCoverage ? [] : [babel({
       presets: [reactCompilerPreset()]
-    }),
+    })]),
     tailwindcss()
   ],
   
