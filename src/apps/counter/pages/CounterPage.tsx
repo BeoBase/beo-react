@@ -24,6 +24,7 @@ export default function CounterPage() {
       <main className="mx-auto my-8 w-[90%] max-w-200 rounded-2xl bg-linear-to-b from-[#222c31] to-[#111d32] px-6 py-4 font-['Quicksand'] text-[#d9e2f1] shadow-lg">
         <ConfigureCounter onSet={handleSetCount} />
         <Counter initialCount={chosenCount} />
+        <Counter initialCount={0} />
       </main>
     </>
   );
