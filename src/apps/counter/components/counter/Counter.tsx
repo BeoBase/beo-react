@@ -4,6 +4,7 @@ import IconButton from '../ui/IconButton.tsx';
 import MinusIcon from '../ui/icons/MinusIcon.tsx';
 import PlusIcon from '../ui/icons/PlusIcon.tsx';
 import CounterOutput from './CounterOutput.tsx';
+import CounterHistory from "./CounterHistory.tsx";
 import { log } from '../../log.ts';
 
 function isPrime(number: number) {
@@ -34,16 +35,25 @@ interface CounterProps {
 const Counter = memo(function Counter({ initialCount }: CounterProps) {
   log('<Counter /> rendered', 1);
 
+  // const initialCountIsPrime = isPrime(initialCount);
   const initialCountIsPrime = useMemo(() => isPrime(initialCount), [initialCount]);
 
-  const [counter, setCounter] = useState(initialCount);
+  // const [counter, setCounter] = useState(initialCount);
+  const [counterChanges, setCounterChanges] = useState<number[]>([initialCount]);
+
+  const currentCounter = counterChanges.reduce(
+    (prevCounter, counterChange) => prevCounter + counterChange,
+    0
+  );
 
   const handleDecrement = useCallback(function handleDecrement() {
-    setCounter((prevCounter) => prevCounter - 1);
+    // setCounter((prevCounter) => prevCounter - 1);
+    setCounterChanges((prevCounterChanges) => [-1, ...prevCounterChanges]);
   }, []);
 
   const handleIncrement = useCallback(function handleIncrement() {
-    setCounter((prevCounter) => prevCounter + 1);
+    // setCounter((prevCounter) => prevCounter + 1);
+    setCounterChanges((prevCounterChanges) => [1, ...prevCounterChanges]);
   }, []);
 
   return (
@@ -56,11 +66,13 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
         <IconButton icon={MinusIcon} onClick={handleDecrement}>
           Decrement
         </IconButton>
-        <CounterOutput value={counter} />
+        {/* <CounterOutput value={counter} /> */}
+        <CounterOutput value={currentCounter} />
         <IconButton icon={PlusIcon} onClick={handleIncrement}>
           Increment
         </IconButton>
       </p>
+      <CounterHistory history={counterChanges} />
     </section>
   );
 });
