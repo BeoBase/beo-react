@@ -3,9 +3,12 @@ import { describe, expect, it } from 'vitest';
 
 import CounterHistory from './CounterHistory.tsx';
 
+// Builds history entries from plain numbers, using the position as a unique id.
+const toHistory = (values: number[]) => values.map((value, id) => ({ value, id }));
+
 describe('CounterHistory', () => {
   it('renders an ordered list with one item per history entry', () => {
-    render(<CounterHistory history={[3, 2, 1]} />);
+    render(<CounterHistory history={toHistory([3, 2, 1])} />);
 
     expect(screen.getByRole('list')).toBeInTheDocument();
     const items = screen.getAllByRole('listitem');
@@ -20,13 +23,20 @@ describe('CounterHistory', () => {
   });
 
   it('renders repeated values as separate items', () => {
-    render(<CounterHistory history={[1, 1, 1]} />);
+    render(<CounterHistory history={toHistory([1, 1, 1])} />);
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
   });
 
+  it('shows the value of each change, including negative values', () => {
+    render(<CounterHistory history={[{ value: -1, id: 10 }, { value: 5, id: 20 }]} />);
+
+    const items = screen.getAllByRole('listitem');
+    expect(items.map((item) => item.textContent)).toEqual(['-1', '5']);
+  });
+
   it('does not highlight items by default', () => {
-    render(<CounterHistory history={[1, 2]} />);
+    render(<CounterHistory history={toHistory([1, 2])} />);
 
     screen.getAllByRole('listitem').forEach((item) => {
       expect(item).not.toHaveClass('bg-[#335453]');
@@ -34,7 +44,7 @@ describe('CounterHistory', () => {
   });
 
   it('toggles an item selected on click and off on a second click', () => {
-    render(<CounterHistory history={[1, 2]} />);
+    render(<CounterHistory history={toHistory([1, 2])} />);
     const [first, second] = screen.getAllByRole('listitem');
 
     fireEvent.click(second);
@@ -46,7 +56,7 @@ describe('CounterHistory', () => {
   });
 
   it('selects items independently', () => {
-    render(<CounterHistory history={[1, 2]} />);
+    render(<CounterHistory history={toHistory([1, 2])} />);
     const [first, second] = screen.getAllByRole('listitem');
 
     fireEvent.click(first);
