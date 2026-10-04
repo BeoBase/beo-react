@@ -16,6 +16,7 @@ export default function CounterPage() {
 
   function handleSetCount(newCount: number) {
     setChosenCount(newCount);
+    console.log(chosenCount);
   }
 
   return (
