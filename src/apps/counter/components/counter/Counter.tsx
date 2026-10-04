@@ -4,7 +4,7 @@ import IconButton from '../ui/IconButton.tsx';
 import MinusIcon from '../ui/icons/MinusIcon.tsx';
 import PlusIcon from '../ui/icons/PlusIcon.tsx';
 import CounterOutput from './CounterOutput.tsx';
-import CounterHistory from "./CounterHistory.tsx";
+import CounterHistory, {type CounterChange} from "./CounterHistory.tsx";
 import { log } from '../../log.ts';
 
 function isPrime(number: number) {
@@ -39,21 +39,27 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
   const initialCountIsPrime = useMemo(() => isPrime(initialCount), [initialCount]);
 
   // const [counter, setCounter] = useState(initialCount);
-  const [counterChanges, setCounterChanges] = useState<number[]>([initialCount]);
+  const [counterChanges, setCounterChanges] = useState<CounterChange[]>([{
+    value: initialCount, id: Math.random() * 1000
+  }]);
 
   const currentCounter = counterChanges.reduce(
-    (prevCounter, counterChange) => prevCounter + counterChange,
+    (prevCounter, counterChange) => prevCounter + counterChange.value,
     0
   );
 
   const handleDecrement = useCallback(function handleDecrement() {
     // setCounter((prevCounter) => prevCounter - 1);
-    setCounterChanges((prevCounterChanges) => [-1, ...prevCounterChanges]);
+    setCounterChanges((prevCounterChanges) => [
+      {value: -1, id: Math.random() * 1000},
+      ...prevCounterChanges]);
   }, []);
 
   const handleIncrement = useCallback(function handleIncrement() {
     // setCounter((prevCounter) => prevCounter + 1);
-    setCounterChanges((prevCounterChanges) => [1, ...prevCounterChanges]);
+    setCounterChanges((prevCounterChanges) => [
+      {value: 1, id: Math.random() * 1000},
+      ...prevCounterChanges]);
   }, []);
 
   return (

@@ -6,6 +6,15 @@ interface HistoryItemProps {
   count: number;
 }
 
+export interface CounterChange {
+  value: number;
+  id: number;
+}
+
+interface CounterHistoryProps {
+  history: CounterChange[];
+}
+
 function HistoryItem({ count }: HistoryItemProps) {
   log('<HistoryItem /> rendered', 3);
 
@@ -29,17 +38,13 @@ function HistoryItem({ count }: HistoryItemProps) {
   );
 }
 
-interface CounterHistoryProps {
-  history: number[];
-}
-
 export default function CounterHistory({ history }: CounterHistoryProps) {
   log('<CounterHistory /> rendered', 2);
 
   return (
     <ol className="mx-auto flex list-none flex-col items-center justify-center gap-[0.2rem] p-0 text-center">
-      {history.map((count, index) => (
-        <HistoryItem key={index} count={count} />
+      {history.map(counterChange => (
+        <HistoryItem key={counterChange.id} count={counterChange.value} />
       ))}
     </ol>
   );
