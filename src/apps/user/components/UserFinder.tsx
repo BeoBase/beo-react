@@ -1,4 +1,5 @@
-import { type ChangeEvent, Fragment, useState, useEffect } from 'react';
+// import { type ChangeEvent, Fragment, useState, useEffect } from 'react';
+import { type ChangeEvent, Fragment, useState } from 'react';
 
 import Users from './Users';
 import classes from './UserFinder.module.scss';
@@ -15,14 +16,17 @@ const DUMMY_USERS: DummyUser[] = [
 ];
 
 const UserFinder = () => {
-  const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
+  // const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    setFilteredUsers(
-      DUMMY_USERS.filter((user) => user.name.includes(searchTerm))
-    );
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   setFilteredUsers(
+  //     DUMMY_USERS.filter((user) => user.name.includes(searchTerm))
+  //   );
+  // }, [searchTerm]);
+
+  // Calculated during render instead of state + effect (avoids an extra render).
+  const filteredUsers = DUMMY_USERS.filter((user) => user.name.includes(searchTerm));
 
   const searchChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
