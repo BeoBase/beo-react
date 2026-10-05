@@ -6,6 +6,10 @@ interface UserProps {
 }
 
 class User extends Component<UserProps> {
+  componentWillUnmount() {
+    console.log('user will unmount');
+  }
+
   render() {
     return <li className={classes.user}>{this.props.name}</li>;
   }
