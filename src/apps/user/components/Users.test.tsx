@@ -3,11 +3,16 @@ import { describe, expect, it } from 'vitest';
 
 import Users from './Users.tsx';
 
-const NAMES = ['Max', 'Manuel', 'Julie'];
+const USERS = [
+  { id: 'u1', name: 'Max' },
+  { id: 'u2', name: 'Manuel' },
+  { id: 'u3', name: 'Julie' },
+];
+const NAMES = USERS.map((user) => user.name);
 
 describe('Users', () => {
   it('renders the toggle button and the users by default', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     expect(screen.getByRole('button', { name: 'Hide Users' })).toBeInTheDocument();
     NAMES.forEach((name) => {
@@ -16,21 +21,43 @@ describe('Users', () => {
   });
 
   it('renders the users in order inside a list', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     expect(screen.getByRole('list')).toBeInTheDocument();
     expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual(NAMES);
   });
 
+  it('renders only the users it is given', () => {
+    render(<Users users={[USERS[1]]} />);
+
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual(['Manuel']);
+    expect(screen.queryByText('Max')).not.toBeInTheDocument();
+  });
+
+  it('renders an empty list when given no users', () => {
+    render(<Users users={[]} />);
+
+    expect(screen.getByRole('list')).toBeInTheDocument();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+
+  it('updates the list when the users prop changes', () => {
+    const { rerender } = render(<Users users={USERS} />);
+
+    rerender(<Users users={[USERS[2]]} />);
+
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual(['Julie']);
+  });
+
   it('applies the users style from the SCSS module', () => {
-    const { container } = render(<Users />);
+    const { container } = render(<Users users={USERS} />);
 
     // CSS modules hash the class name, so match on the original name.
     expect((container.firstChild as HTMLElement).className).toMatch(/users/);
   });
 
   it('hides the users when the button is clicked', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide Users' }));
 
@@ -41,7 +68,7 @@ describe('Users', () => {
   });
 
   it('changes the button label to "Show Users" after hiding', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide Users' }));
 
@@ -50,7 +77,7 @@ describe('Users', () => {
   });
 
   it('shows the users again when the button is clicked a second time', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide Users' }));
     fireEvent.click(screen.getByRole('button', { name: 'Show Users' }));
@@ -60,7 +87,7 @@ describe('Users', () => {
   });
 
   it('keeps toggling correctly over several clicks', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
     const button = screen.getByRole('button');
 
     fireEvent.click(button);
@@ -72,7 +99,7 @@ describe('Users', () => {
   });
 
   it('always renders exactly one button', () => {
-    render(<Users />);
+    render(<Users users={USERS} />);
 
     expect(screen.getAllByRole('button')).toHaveLength(1);
 
