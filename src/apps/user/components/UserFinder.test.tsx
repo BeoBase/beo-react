@@ -2,27 +2,61 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import UserFinder from './UserFinder.tsx';
+import UsersContext from '../store/users-context.ts';
+
+const USERS = [
+  { id: 'u1', name: 'Max' },
+  { id: 'u2', name: 'Manuel' },
+  { id: 'u3', name: 'Julie' },
+];
+
+// UserFinder reads its users from UsersContext, so it needs a provider.
+const renderFinder = (users = USERS) =>
+  render(
+    <UsersContext.Provider value={{ users }}>
+      <UserFinder />
+    </UsersContext.Provider>,
+  );
 
 const names = () => screen.queryAllByRole('listitem').map((item) => item.textContent);
 const search = (value: string) =>
   fireEvent.change(screen.getByRole('searchbox'), { target: { value } });
 
 describe('UserFinder', () => {
-  it('renders a search box and all users by default', () => {
-    render(<UserFinder />);
+  it('renders a search box and all users from the context by default', () => {
+    renderFinder();
 
     expect(screen.getByRole('searchbox')).toBeInTheDocument();
     expect(names()).toEqual(['Max', 'Manuel', 'Julie']);
   });
 
   it('renders the Users toggle button', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     expect(screen.getByRole('button', { name: 'Hide Users' })).toBeInTheDocument();
   });
 
-  it('filters the users as the user types', () => {
+  it('shows the users that the provider supplies, not a fixed list', () => {
+    renderFinder([{ id: 'x1', name: 'Anna' }, { id: 'x2', name: 'Bob' }]);
+
+    expect(names()).toEqual(['Anna', 'Bob']);
+  });
+
+  it('shows no users when there is no provider (empty default context)', () => {
     render(<UserFinder />);
+
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+    expect(names()).toEqual([]);
+  });
+
+  it('shows no users when the provider supplies an empty list', () => {
+    renderFinder([]);
+
+    expect(names()).toEqual([]);
+  });
+
+  it('filters the users as the user types', () => {
+    renderFinder();
 
     search('Ma');
 
@@ -30,7 +64,7 @@ describe('UserFinder', () => {
   });
 
   it('narrows the list to one user', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     search('Julie');
 
@@ -38,7 +72,7 @@ describe('UserFinder', () => {
   });
 
   it('shows no users when nothing matches', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     search('zzz');
 
@@ -46,7 +80,7 @@ describe('UserFinder', () => {
   });
 
   it('shows all users again when the search is cleared', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     search('Max');
     search('');
@@ -54,8 +88,16 @@ describe('UserFinder', () => {
     expect(names()).toEqual(['Max', 'Manuel', 'Julie']);
   });
 
+  it('filters the context users, not other names', () => {
+    renderFinder([{ id: 'x1', name: 'Anna' }, { id: 'x2', name: 'Bob' }]);
+
+    search('An');
+
+    expect(names()).toEqual(['Anna']);
+  });
+
   it('matches case-sensitively', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     search('max');
 
@@ -63,7 +105,7 @@ describe('UserFinder', () => {
   });
 
   it('keeps the hide/show state when the search changes', () => {
-    render(<UserFinder />);
+    renderFinder();
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide Users' }));
     search('Ma');
