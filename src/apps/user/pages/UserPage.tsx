@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import Users from '../components/Users.tsx';
+import UserFinder from "../components/UserFinder.tsx";
 
 export default function UserPage() {
   useEffect(() => {
@@ -9,7 +9,7 @@ export default function UserPage() {
 
   return (
     <div>
-      <Users />
+      <UserFinder />
     </div>
   );
 }

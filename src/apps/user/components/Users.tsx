@@ -1,6 +1,7 @@
 import { Component } from 'react';
 
 import User from './User.tsx';
+import { type DummyUser } from "./UserFinder.tsx";
 
 import classes from '../styles/Users.module.scss';
 
@@ -8,19 +9,12 @@ interface UsersState {
   showUsers: boolean;
 }
 
-interface DummyUser {
-  id: string;
-  name: string;
+interface UsersProps {
+  users: DummyUser[];
 }
 
-const DUMMY_USERS: DummyUser[] = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
-];
-
-class Users extends Component<object, UsersState> {
-  constructor(props: object) {
+class Users extends Component<UsersProps, UsersState> {
+  constructor(props: UsersProps) {
     super(props);
     this.state = {
       showUsers: true,
@@ -36,7 +30,7 @@ class Users extends Component<object, UsersState> {
   render() {
     const usersList = (
       <ul>
-        {DUMMY_USERS.map((user) => (
+        {this.props.users.map((user) => (
           <User key={user.id} name={user.name} />
         ))}
       </ul>
