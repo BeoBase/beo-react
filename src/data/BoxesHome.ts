@@ -28,9 +28,14 @@ export const boxesHomeData = [
     title: 'Cashflow Tracking',
     buttons: [
       {
+      label: '[TEMP] User App',
+      to: 'user',
+      },
+      {
         label: '[TEMP] Counter App',
         to: 'counter',
-      },{
+      },
+      {
         label: '[TEMP] React Quiz',
         to: 'quiz',
       },
