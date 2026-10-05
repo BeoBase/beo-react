@@ -29,6 +29,11 @@ class UserFinder extends Component<object, UserFinderState> {
     }
   }
 
+  componentDidMount() {
+    // Send the http request here, imagine for now
+    this.setState({filteredUsers: DUMMY_USERS});
+  }
+
   componentDidUpdate(_prevProps: object, prevState: UserFinderState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
       this.setState({
