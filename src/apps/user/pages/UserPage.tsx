@@ -20,7 +20,9 @@ export default function UserPage() {
 
   return (
     <UsersContext.Provider value={usersContext}>
-      <UserFinder />
+      <div>
+        <UserFinder />
+      </div>
     </UsersContext.Provider>
   );
 }
