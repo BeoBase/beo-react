@@ -2,6 +2,7 @@ import { type ChangeEvent, type ContextType, Fragment, Component } from 'react';
 
 import Users from './Users';
 import UsersContext from "../store/users-context.ts";
+import ErrorBoundary from "./ErrorBoundary.tsx";
 
 import classes from './UserFinder.module.scss';
 
@@ -55,7 +56,9 @@ class UserFinder extends Component<object, UserFinderState> {
         <div className={classes.finder}>
           <input type='search' onChange={this.searchChangeHandler.bind(this)} />
         </div>
-        <Users users={this.state.filteredUsers} />
+        <ErrorBoundary>
+          <Users users={this.state.filteredUsers} />
+        </ErrorBoundary>
       </Fragment>
     );
   }
