@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
-import {BackendConfig} from "../../../components/config/BackendConfig.ts";
 import {sortPlacesByDistance} from "../loc.ts";
+import {fetchAvailablePlaces} from '../http.ts';
 
 import Places, {type Place} from './Places';
 import ErrorMessage from "./ErrorMessage";
@@ -20,16 +20,11 @@ export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps)
       setIsFetching(true);
 
       try {
-        const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/places`);
-        const resData = await response.json();
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch locations');
-        }
+        const places = await fetchAvailablePlaces()
 
         navigator.geolocation.getCurrentPosition((position) => {
           const sortedPlaces = sortPlacesByDistance<Place & { lat: number; lon: number }>(
-            resData.places, position.coords.latitude, position.coords.longitude);
+            places, position.coords.latitude, position.coords.longitude);
           setAvailablePlaces(sortedPlaces);
         });
 
