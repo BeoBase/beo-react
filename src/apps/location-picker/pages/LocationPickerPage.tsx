@@ -1,12 +1,18 @@
-import { useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
-import Places, {type Place} from '../components/Places';
+import Places, { type Place } from '../components/Places';
 import Modal from '../components/Modal';
 import DeleteConfirmation from '../components/DeleteConfirmation';
-import logoImg from '../assets/logo.png';
 import AvailablePlaces from '../components/AvailablePlaces';
+import logoImg from '../assets/logo.png';
 
-function LocationPickerPage() {
+import classes from '../styles/location-picker.module.scss';
+
+export default function LocationPickerPage() {
+  useEffect(() => {
+    document.title = 'Beo Base | Location Picker';
+  }, []);
+
   const selectedPlace = useRef<Place | null>(null);
 
   const [userPlaces, setUserPlaces] = useState<Place[]>([]);
@@ -22,15 +28,12 @@ function LocationPickerPage() {
     setModalIsOpen(false);
   }
 
-  function handleSelectPlace(selectedPlace: Place) {
+  function handleSelectPlace(place: Place) {
     setUserPlaces((prevPickedPlaces) => {
-      if (!prevPickedPlaces) {
-        prevPickedPlaces = [];
-      }
-      if (prevPickedPlaces.some((place) => place.id === selectedPlace.id)) {
+      if (prevPickedPlaces.some((p) => p.id === place.id)) {
         return prevPickedPlaces;
       }
-      return [selectedPlace, ...prevPickedPlaces];
+      return [place, ...prevPickedPlaces];
     });
   }
 
@@ -43,7 +46,7 @@ function LocationPickerPage() {
   }, []);
 
   return (
-    <>
+    <div className={classes.page}>
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
@@ -51,7 +54,7 @@ function LocationPickerPage() {
         />
       </Modal>
 
-      <header>
+      <header className={classes.header}>
         <img src={logoImg} alt="Stylized globe" />
         <h1>PlacePicker</h1>
         <p>
@@ -69,8 +72,6 @@ function LocationPickerPage() {
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>
-    </>
+    </div>
   );
 }
-
-export default LocationPickerPage;
