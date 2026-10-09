@@ -6,8 +6,8 @@ import { BackendConfig } from '../../../components/config/BackendConfig.ts';
 import AvailablePlaces from './AvailablePlaces';
 
 const PLACES = [
-  { id: 'p1', title: 'Forest Waterfall', image: { src: 'forest.jpg', alt: 'A waterfall' } },
-  { id: 'p2', title: 'Desert Dunes', image: { src: 'desert.jpg', alt: 'Golden dunes' } },
+  { id: 'p1', title: 'Forest Waterfall', lat: 1, lon: 1, image: { src: 'forest.jpg', alt: 'A waterfall' } },
+  { id: 'p2', title: 'Desert Dunes', lat: 2, lon: 2, image: { src: 'desert.jpg', alt: 'Golden dunes' } },
 ];
 
 describe('AvailablePlaces', () => {
@@ -17,6 +17,13 @@ describe('AvailablePlaces', () => {
     // Never hit a real backend in unit tests
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ places: PLACES }) });
     vi.stubGlobal('fetch', fetchMock);
+    // jsdom has no geolocation, so fake a position
+    vi.stubGlobal('navigator', {
+      geolocation: {
+        getCurrentPosition: (success: (position: unknown) => void) =>
+          success({ coords: { latitude: 0, longitude: 0 } }),
+      },
+    });
   });
 
   afterEach(() => {
