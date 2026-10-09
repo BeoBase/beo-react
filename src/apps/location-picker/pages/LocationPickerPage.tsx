@@ -40,7 +40,7 @@ export default function LocationPickerPage() {
     try {
       await updateUserPlaces([place, ...userPlaces]);
     } catch (error) {
-      //Todo: handle the error here
+      console.error(error);
     }
   }
 
