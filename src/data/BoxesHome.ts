@@ -28,6 +28,10 @@ export const boxesHomeData = [
     title: 'Cashflow Tracking',
     buttons: [
       {
+        label: '[TEMP] Location Picker',
+        to: 'location-picker',
+      },
+      {
       label: '[TEMP] User App',
       to: 'user',
       },
