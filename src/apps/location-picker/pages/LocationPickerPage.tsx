@@ -6,6 +6,7 @@ import DeleteConfirmation from '../components/DeleteConfirmation';
 import AvailablePlaces from '../components/AvailablePlaces';
 import logoImg from '../assets/logo.png';
 
+import {updateUserPlaces} from "../http.ts";
 import classes from '../styles/location-picker.module.scss';
 
 export default function LocationPickerPage() {
@@ -28,13 +29,19 @@ export default function LocationPickerPage() {
     setModalIsOpen(false);
   }
 
-  function handleSelectPlace(place: Place) {
+  async function handleSelectPlace(place: Place) {
     setUserPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((p) => p.id === place.id)) {
         return prevPickedPlaces;
       }
       return [place, ...prevPickedPlaces];
     });
+
+    try {
+      await updateUserPlaces([place, ...userPlaces]);
+    } catch (error) {
+      //Todo: handle the error here
+    }
   }
 
   const handleRemovePlace = useCallback(function handleRemovePlace() {
