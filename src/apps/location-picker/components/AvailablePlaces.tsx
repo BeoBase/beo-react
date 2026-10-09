@@ -11,11 +11,13 @@ export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps)
   const [availablePlaces, setAvailablePlaces] = useState([]);
 
   useEffect(() => {
-    fetch(`${BackendConfig.springApiUrl}/location-picker/places`).then((response) => {
-      return response.json();
-    }).then((resData) => {
+    async function fetchPlaces() {
+      const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/places`);
+      const resData = await response.json();
       setAvailablePlaces(resData.places);
-    });
+    }
+
+    fetchPlaces();
   }, []);
 
   return (
