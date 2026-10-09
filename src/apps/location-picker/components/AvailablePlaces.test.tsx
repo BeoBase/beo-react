@@ -24,13 +24,25 @@ describe('AvailablePlaces', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders the section title and the fallback text before the places arrive', async () => {
+  it('renders the section title and the loading text before the places arrive', async () => {
     render(<AvailablePlaces onSelectPlace={vi.fn()} />);
 
     expect(screen.getByRole('heading', { name: 'Available Places' })).toBeInTheDocument();
-    expect(screen.getByText('No places available.')).toBeInTheDocument();
+    expect(screen.getByText('Loading data...')).toBeInTheDocument();
+    expect(screen.queryByText('No places available.')).not.toBeInTheDocument();
 
     await screen.findAllByRole('listitem');
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+  });
+
+  it('shows the fallback text when the backend returns no places', async () => {
+    fetchMock.mockResolvedValue({ json: async () => ({ places: [] }) });
+
+    render(<AvailablePlaces onSelectPlace={vi.fn()} />);
+
+    expect(await screen.findByText('No places available.')).toBeInTheDocument();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
   });
 
   it('fetches the places from the backend', async () => {
