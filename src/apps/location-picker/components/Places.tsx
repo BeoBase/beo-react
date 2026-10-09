@@ -15,17 +15,22 @@ interface PlacesProps {
   title: string;
   places: Place[];
   fallbackText: string;
+  isLoading: boolean;
+  loadingText: string;
   onSelectPlace: (place: Place) => void;
 }
 
-export default function Places({ title, places, fallbackText, onSelectPlace }: PlacesProps) {
+export default function Places({ title, places, fallbackText, isLoading, loadingText, onSelectPlace }: PlacesProps) {
   console.log(places);
 
   return (
     <section className={classes.placesCategory}>
       <h2>{title}</h2>
-      {places.length === 0 && <p className={classes.fallbackText}>{fallbackText}</p>}
-      {places.length > 0 && (
+
+      {isLoading && <p className={classes.fallbackText}>{loadingText}</p>}
+
+      {!isLoading && places.length === 0 && <p className={classes.fallbackText}>{fallbackText}</p>}
+      {!isLoading && places.length > 0 && (
         <ul className={classes.places}>
           {places.map((place) => (
             <li key={place.id} className={classes.placeItem}>
