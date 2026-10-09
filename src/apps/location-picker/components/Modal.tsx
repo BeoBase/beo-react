@@ -27,7 +27,7 @@ function Modal({ open, children, onClose }: ModalProps) {
     <dialog className={classes.modal} ref={dialog} onClose={onClose}>
       {open ? children : null}
     </dialog>,
-    document.getElementById('modal')!
+    document.body
   );
 }
 
