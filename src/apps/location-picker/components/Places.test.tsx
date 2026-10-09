@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { BackendConfig } from '../../../components/config/BackendConfig.ts';
+
 import Places, { type Place } from './Places';
 
 const PLACES: Place[] = [
@@ -35,7 +37,7 @@ describe('Places', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
     expect(screen.getByRole('img', { name: 'A waterfall' })).toHaveAttribute(
       'src',
-      'http://localhost:3000/forest.jpg'
+      `${BackendConfig.springApiUrl}/location-picker/images/forest.jpg`
     );
     expect(screen.getByRole('heading', { name: 'Desert Dunes' })).toBeInTheDocument();
   });

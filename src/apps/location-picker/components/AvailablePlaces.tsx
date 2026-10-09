@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {BackendConfig} from "../../../components/config/BackendConfig.ts";
 
 import Places, {type Place} from './Places';
 
@@ -10,7 +11,7 @@ export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps)
   const [availablePlaces, setAvailablePlaces] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/location-picker/places').then((response) => {
+    fetch(`${BackendConfig.springApiUrl}/location-picker/places`).then((response) => {
       return response.json();
     }).then((resData) => {
       setAvailablePlaces(resData.places);
