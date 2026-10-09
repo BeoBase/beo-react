@@ -1,0 +1,40 @@
+import classes from '../styles/location-picker.module.scss';
+
+export interface Place {
+  id: string | number;
+  title: string;
+  image: {
+    src: string;
+    alt: string;
+  };
+}
+
+interface PlacesProps {
+  title: string;
+  places: Place[];
+  fallbackText: string;
+  onSelectPlace: (place: Place) => void;
+}
+
+export default function Places({ title, places, fallbackText, onSelectPlace }: PlacesProps) {
+  console.log(places);
+
+  return (
+    <section className={classes.placesCategory}>
+      <h2>{title}</h2>
+      {places.length === 0 && <p className={classes.fallbackText}>{fallbackText}</p>}
+      {places.length > 0 && (
+        <ul className={classes.places}>
+          {places.map((place) => (
+            <li key={place.id} className={classes.placeItem}>
+              <button onClick={() => onSelectPlace(place)}>
+                <img src={`http://localhost:3000/${place.image.src}`} alt={place.image.alt} />
+                <h3>{place.title}</h3>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
