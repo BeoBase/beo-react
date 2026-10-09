@@ -15,7 +15,7 @@ describe('AvailablePlaces', () => {
 
   beforeEach(() => {
     // Never hit a real backend in unit tests
-    fetchMock.mockResolvedValue({ json: async () => ({ places: PLACES }) });
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ places: PLACES }) });
     vi.stubGlobal('fetch', fetchMock);
   });
 
@@ -37,7 +37,7 @@ describe('AvailablePlaces', () => {
   });
 
   it('shows the fallback text when the backend returns no places', async () => {
-    fetchMock.mockResolvedValue({ json: async () => ({ places: [] }) });
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ places: [] }) });
 
     render(<AvailablePlaces onSelectPlace={vi.fn()} />);
 
@@ -68,5 +68,32 @@ describe('AvailablePlaces', () => {
     fireEvent.click(await screen.findByRole('button', { name: /Desert Dunes/ }));
 
     expect(onSelectPlace).toHaveBeenCalledWith(PLACES[1]);
+  });
+
+  it('shows an error message when the backend answers with an error status', async () => {
+    fetchMock.mockResolvedValue({ ok: false, json: async () => ({}) });
+
+    render(<AvailablePlaces onSelectPlace={vi.fn()} />);
+
+    expect(await screen.findByText('An error occurred!')).toBeInTheDocument();
+    expect(screen.getByText('Failed to fetch locations')).toBeInTheDocument();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+  });
+
+  it('shows the error message when the request itself fails', async () => {
+    fetchMock.mockRejectedValue(new Error('Network down'));
+
+    render(<AvailablePlaces onSelectPlace={vi.fn()} />);
+
+    expect(await screen.findByText('An error occurred!')).toBeInTheDocument();
+    expect(screen.getByText('Network down')).toBeInTheDocument();
+  });
+
+  it('falls back to a generic message when something other than an Error is thrown', async () => {
+    fetchMock.mockRejectedValue('boom');
+
+    render(<AvailablePlaces onSelectPlace={vi.fn()} />);
+
+    expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
   });
 });
