@@ -1,5 +1,7 @@
 import {BackendConfig} from "../../components/config/BackendConfig.ts";
 
+import type {Place} from "./components/Places";
+
 export async function fetchAvailablePlaces() {
   const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/places`);
   const resData = await response.json();
@@ -11,10 +13,10 @@ export async function fetchAvailablePlaces() {
   return resData.places;
 }
 
-export async function updateUserPlaces(places) {
+export async function updateUserPlaces(places: Place[]) {
   const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/user-places`, {
     method: 'PUT',
-    body: JSON.stringify({places}),
+    body: JSON.stringify({placeIds: places.map((place) => place.id)}),
     headers: {
       'Content-Type': 'application/json',
     }
@@ -25,5 +27,5 @@ export async function updateUserPlaces(places) {
     throw new Error('Failed to update user locations');
   }
 
-  return resData.message;
+  return resData.places;
 }
