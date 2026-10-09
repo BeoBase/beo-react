@@ -2,14 +2,14 @@ import {useEffect, useState} from "react";
 import {BackendConfig} from "../../../components/config/BackendConfig.ts";
 
 import Places, {type Place} from './Places';
-import Error from "./Error";
+import ErrorMessage from "./ErrorMessage";
 
 interface AvailablePlacesProps {
   onSelectPlace: (place: Place) => void;
 }
 
 export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps) {
-  const [availablePlaces, setAvailablePlaces] = useState([]);
+  const [availablePlaces, setAvailablePlaces] = useState<Place[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -19,24 +19,25 @@ export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps)
 
       try {
         const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/places`);
-        const resData = await response.json();
 
         if (!response.ok) {
           throw new Error('Failed to fetch locations');
         }
+
+        const resData = await response.json();
         setAvailablePlaces(resData.places);
       } catch (error) {
-        setError(error);
+        setError(error instanceof Error ? error : new Error('Something went wrong'));
+      } finally {
+        setIsFetching(false);
       }
-
-      setIsFetching(false);
     }
 
     fetchPlaces();
   }, []);
 
   if (error) {
-    return <Error
+    return <ErrorMessage
       title="An error occurred!"
       message={error.message}
     />;
