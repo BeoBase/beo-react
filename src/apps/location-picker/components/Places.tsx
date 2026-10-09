@@ -1,3 +1,5 @@
+import {BackendConfig} from "../../../components/config/BackendConfig.ts";
+
 import classes from '../styles/location-picker.module.scss';
 
 export interface Place {
@@ -28,7 +30,7 @@ export default function Places({ title, places, fallbackText, onSelectPlace }: P
           {places.map((place) => (
             <li key={place.id} className={classes.placeItem}>
               <button onClick={() => onSelectPlace(place)}>
-                <img src={`http://localhost:3000/${place.image.src}`} alt={place.image.alt} />
+                <img src={`${BackendConfig.springApiUrl}/location-picker/images/${place.image.src}`} alt={place.image.alt} />
                 <h3>{place.title}</h3>
               </button>
             </li>
