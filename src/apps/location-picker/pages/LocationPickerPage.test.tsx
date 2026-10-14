@@ -1,14 +1,19 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import LocationPickerPage from './LocationPickerPage';
 import type { Place } from '../components/Places';
+import { updateUserPlaces } from '../http';
 
 const PLACE: Place = {
   id: 'p1',
   title: 'Forest Waterfall',
   image: { src: 'forest.jpg', alt: 'A waterfall' },
 };
+
+vi.mock('../http', () => ({
+  updateUserPlaces: vi.fn(),
+}));
 
 // There is no data source yet, so stand in for AvailablePlaces with a button that picks a place.
 vi.mock('../components/AvailablePlaces', () => ({
@@ -19,6 +24,7 @@ vi.mock('../components/AvailablePlaces', () => ({
 
 describe('LocationPickerPage', () => {
   beforeEach(() => {
+    vi.mocked(updateUserPlaces).mockResolvedValue([]);
     // jsdom has no real <dialog> support, so mimic open/close via the `open` attribute.
     HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
       this.setAttribute('open', '');
@@ -63,15 +69,17 @@ describe('LocationPickerPage', () => {
     expect(screen.getByText('Are you sure?')).toBeInTheDocument();
   });
 
-  it('removes the place when the removal is confirmed', () => {
+  it('removes the place when the removal is confirmed', async () => {
     render(<LocationPickerPage />);
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
     fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
 
-    expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
-    expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
+      expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
+    });
   });
 
   it('keeps the place when the removal is cancelled', () => {
