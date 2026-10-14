@@ -6,12 +6,13 @@ import DeleteConfirmation from '../components/DeleteConfirmation';
 import AvailablePlaces from '../components/AvailablePlaces';
 import ErrorMessage from "../components/ErrorMessage.tsx";
 
-import {updateUserPlaces} from "../http.ts";
+import {fetchUserPlaces, updateUserPlaces} from "../http.ts";
 
 import logoImg from '../assets/logo.png';
 import classes from '../styles/location-picker.module.scss';
 
 export default function LocationPickerPage() {
+
   useEffect(() => {
     document.title = 'Beo Base | Location Picker';
   }, []);
@@ -22,6 +23,23 @@ export default function LocationPickerPage() {
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState<{ message: string } | null>(null);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<{ message: string } | null>(null);
+
+  useEffect(() => {
+    async function fetchPlaces() {
+      setIsFetching(true);
+      try {
+        const places = await fetchUserPlaces();
+        setUserPlaces(places);
+      } catch (error) {
+        setError({ message: error instanceof Error ? error.message : 'Failed to fetch user places.'});
+      }
+      setIsFetching(false);
+    }
+    fetchPlaces();
+  }, []);
 
   function handleStartRemovePlace(place: Place) {
     setModalIsOpen(true);
@@ -105,12 +123,15 @@ export default function LocationPickerPage() {
         </p>
       </header>
       <main>
-        <Places
+        {error && <ErrorMessage title="An error occured!" message={error.message}/>}
+        {!error && <Places
           title="I'd like to visit ..."
           fallbackText="Select the places you would like to visit below."
           places={userPlaces}
           onSelectPlace={handleStartRemovePlace}
-        />
+          isLoading={isFetching}
+          loadingText="Fetch user places..."
+        />}
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>
