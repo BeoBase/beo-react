@@ -4,9 +4,11 @@ import Places, { type Place } from '../components/Places';
 import Modal from '../components/Modal';
 import DeleteConfirmation from '../components/DeleteConfirmation';
 import AvailablePlaces from '../components/AvailablePlaces';
-import logoImg from '../assets/logo.png';
+import ErrorMessage from "../components/ErrorMessage.tsx";
 
 import {updateUserPlaces} from "../http.ts";
+
+import logoImg from '../assets/logo.png';
 import classes from '../styles/location-picker.module.scss';
 
 export default function LocationPickerPage() {
@@ -17,6 +19,7 @@ export default function LocationPickerPage() {
   const selectedPlace = useRef<Place | null>(null);
 
   const [userPlaces, setUserPlaces] = useState<Place[]>([]);
+  const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState<{ message: string } | null>(null);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -29,6 +32,7 @@ export default function LocationPickerPage() {
     setModalIsOpen(false);
   }
 
+  // This is optimistic updating and roll back if updating API failed
   async function handleSelectPlace(place: Place) {
     setUserPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((p) => p.id === place.id)) {
@@ -41,6 +45,10 @@ export default function LocationPickerPage() {
       await updateUserPlaces([place, ...userPlaces]);
     } catch (error) {
       console.error(error);
+      setErrorUpdatingPlaces({
+        message: error instanceof Error ? error.message : 'Failed to update places',
+      });
+      setUserPlaces(userPlaces);
     }
   }
 
@@ -52,8 +60,23 @@ export default function LocationPickerPage() {
     setModalIsOpen(false);
   }, []);
 
+  function handleError() {
+    setErrorUpdatingPlaces(null);
+  }
+
   return (
     <div className={classes.page}>
+
+      <Modal open={!!errorUpdatingPlaces} onClose={handleError}>
+        {errorUpdatingPlaces && (
+          <ErrorMessage
+            title="An error occured!"
+            message={errorUpdatingPlaces.message}
+            onConfirm={handleError}
+          />
+        )}
+      </Modal>
+
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
