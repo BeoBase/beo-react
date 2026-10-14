@@ -52,13 +52,25 @@ export default function LocationPickerPage() {
     }
   }
 
-  const handleRemovePlace = useCallback(function handleRemovePlace() {
+  const handleRemovePlace = useCallback(async function handleRemovePlace() {
     setUserPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current?.id)
     );
 
+    try {
+      await updateUserPlaces(
+        userPlaces.filter(place => place.id !== selectedPlace.current?.id));
+    } catch (error) {
+      setUserPlaces(userPlaces);
+      setErrorUpdatingPlaces({
+        message: error instanceof Error ? error.message : 'Failed to remove places',
+      });
+    }
+
+
+
     setModalIsOpen(false);
-  }, []);
+  }, [userPlaces]);
 
   function handleError() {
     setErrorUpdatingPlaces(null);
