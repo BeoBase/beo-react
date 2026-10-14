@@ -83,7 +83,7 @@ describe('AvailablePlaces', () => {
     render(<AvailablePlaces onSelectPlace={vi.fn()} />);
 
     expect(await screen.findByText('An error occurred!')).toBeInTheDocument();
-    expect(screen.getByText('Failed to fetch locations')).toBeInTheDocument();
+    expect(screen.getByText('Failed to fetch available locations')).toBeInTheDocument();
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
   });
 

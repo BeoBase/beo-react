@@ -7,7 +7,18 @@ export async function fetchAvailablePlaces() {
   const resData = await response.json();
 
   if (!response.ok) {
-    throw new Error('Failed to fetch locations');
+    throw new Error('Failed to fetch available locations');
+  }
+
+  return resData.places;
+}
+
+export async function fetchUserPlaces() {
+  const response = await fetch(`${BackendConfig.springApiUrl}/location-picker/user-places`);
+  const resData = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch user locations');
   }
 
   return resData.places;
