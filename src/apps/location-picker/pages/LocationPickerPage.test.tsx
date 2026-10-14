@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import LocationPickerPage from './LocationPickerPage';
 import type { Place } from '../components/Places';
-import { updateUserPlaces } from '../http';
+import { fetchUserPlaces, updateUserPlaces } from '../http';
 
 const PLACE: Place = {
   id: 'p1',
@@ -11,7 +11,10 @@ const PLACE: Place = {
   image: { src: 'forest.jpg', alt: 'A waterfall' },
 };
 
+const FALLBACK_TEXT = 'Select the places you would like to visit below.';
+
 vi.mock('../http', () => ({
+  fetchUserPlaces: vi.fn(),
   updateUserPlaces: vi.fn(),
 }));
 
@@ -24,6 +27,7 @@ vi.mock('../components/AvailablePlaces', () => ({
 
 describe('LocationPickerPage', () => {
   beforeEach(() => {
+    vi.mocked(fetchUserPlaces).mockResolvedValue([]);
     vi.mocked(updateUserPlaces).mockResolvedValue([]);
     // jsdom has no real <dialog> support, so mimic open/close via the `open` attribute.
     HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
@@ -34,23 +38,39 @@ describe('LocationPickerPage', () => {
     });
   });
 
-  it('sets the document title', () => {
+  it('sets the document title', async () => {
     render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
 
     expect(document.title).toBe('Beo Base | Location Picker');
   });
 
-  it('renders the header and the empty personal collection', () => {
+  it('renders the header and the empty personal collection', async () => {
     render(<LocationPickerPage />);
 
     expect(screen.getByRole('heading', { name: 'PlacePicker' })).toBeInTheDocument();
-    expect(
-      screen.getByText('Select the places you would like to visit below.')
-    ).toBeInTheDocument();
+    expect(await screen.findByText(FALLBACK_TEXT)).toBeInTheDocument();
   });
 
-  it('adds a picked place to the collection only once', () => {
+  it('shows the places saved by the user once they are fetched', async () => {
+    vi.mocked(fetchUserPlaces).mockResolvedValue([PLACE]);
+
     render(<LocationPickerPage />);
+
+    expect(await screen.findByRole('heading', { name: 'Forest Waterfall' })).toBeInTheDocument();
+  });
+
+  it('shows an error message when the user places cannot be fetched', async () => {
+    vi.mocked(fetchUserPlaces).mockRejectedValue(new Error('boom'));
+
+    render(<LocationPickerPage />);
+
+    expect(await screen.findByText('boom')).toBeInTheDocument();
+  });
+
+  it('adds a picked place to the collection only once', async () => {
+    render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
 
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
@@ -59,8 +79,9 @@ describe('LocationPickerPage', () => {
     expect(screen.getByRole('heading', { name: 'Forest Waterfall' })).toBeInTheDocument();
   });
 
-  it('opens the confirmation modal when a collected place is clicked', () => {
+  it('opens the confirmation modal when a collected place is clicked', async () => {
     render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
 
     fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
@@ -71,6 +92,7 @@ describe('LocationPickerPage', () => {
 
   it('removes the place when the removal is confirmed', async () => {
     render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
     fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
 
@@ -82,8 +104,9 @@ describe('LocationPickerPage', () => {
     });
   });
 
-  it('keeps the place when the removal is cancelled', () => {
+  it('keeps the place when the removal is cancelled', async () => {
     render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
     fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
     fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
 
