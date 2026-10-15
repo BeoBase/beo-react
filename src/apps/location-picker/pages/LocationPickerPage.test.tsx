@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import LocationPickerPage from './LocationPickerPage';
@@ -68,51 +68,51 @@ describe('LocationPickerPage', () => {
     expect(await screen.findByText('boom')).toBeInTheDocument();
   });
 
-  // it('adds a picked place to the collection only once', async () => {
-  //   render(<LocationPickerPage />);
-  //   await screen.findByText(FALLBACK_TEXT);
-  //
-  //   fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
-  //   fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
-  //
-  //   expect(screen.getAllByRole('listitem')).toHaveLength(1);
-  //   expect(screen.getByRole('heading', { name: 'Forest Waterfall' })).toBeInTheDocument();
-  // });
+  it('adds a picked place to the collection only once', async () => {
+    render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
 
-  // it('opens the confirmation modal when a collected place is clicked', async () => {
-  //   render(<LocationPickerPage />);
-  //   await screen.findByText(FALLBACK_TEXT);
-  //   fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
-  //
-  //   fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
-  //
-  //   expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
-  //   expect(screen.getByText('Are you sure?')).toBeInTheDocument();
-  // });
+    fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
 
-  // it('removes the place when the removal is confirmed', async () => {
-  //   render(<LocationPickerPage />);
-  //   await screen.findByText(FALLBACK_TEXT);
-  //   fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
-  //   fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
-  //
-  //   fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
-  //
-  //   await waitFor(() => {
-  //     expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
-  //     expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
-  //   });
-  // });
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+    expect(screen.getByRole('heading', { name: 'Forest Waterfall' })).toBeInTheDocument();
+  });
 
-  // it('keeps the place when the removal is cancelled', async () => {
-  //   render(<LocationPickerPage />);
-  //   await screen.findByText(FALLBACK_TEXT);
-  //   fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
-  //   fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
-  //
-  //   fireEvent.click(screen.getByRole('button', { name: 'No' }));
-  //
-  //   expect(screen.getAllByRole('listitem')).toHaveLength(1);
-  //   expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
-  // });
+  it('opens the confirmation modal when a collected place is clicked', async () => {
+    render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
+    fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
+
+    fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
+
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+    expect(screen.getByText('Are you sure?')).toBeInTheDocument();
+  });
+
+  it('removes the place when the removal is confirmed', async () => {
+    render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
+    fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
+    fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
+      expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
+    });
+  });
+
+  it('keeps the place when the removal is cancelled', async () => {
+    render(<LocationPickerPage />);
+    await screen.findByText(FALLBACK_TEXT);
+    fireEvent.click(screen.getByRole('button', { name: 'Pick place' }));
+    fireEvent.click(screen.getByRole('button', { name: /Forest Waterfall/ }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'No' }));
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+    expect(screen.queryByText('Are you sure?')).not.toBeInTheDocument();
+  });
 });
