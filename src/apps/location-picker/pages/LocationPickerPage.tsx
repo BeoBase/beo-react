@@ -6,7 +6,7 @@ import DeleteConfirmation from '../components/DeleteConfirmation';
 import AvailablePlaces from '../components/AvailablePlaces';
 import ErrorMessage from "../components/ErrorMessage.tsx";
 
-import {fetchUserPlaces} from "../http.ts";
+import {fetchUserPlaces, updateUserPlaces} from "../http.ts";
 import {useFetch} from "../hooks/useFetch.ts";
 
 import logoImg from '../assets/logo.png';
@@ -24,7 +24,12 @@ export default function LocationPickerPage() {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const {isFetching, error, fetchedData: userPlaces} = useFetch(fetchUserPlaces, []);
+  const {
+    isFetching,
+    error,
+    fetchedData: userPlaces,
+    setFetchedData : setUserPlaces,
+  } = useFetch<Place[]>(fetchUserPlaces, []);
 
   function handleStartRemovePlace(place: Place) {
     setModalIsOpen(true);
@@ -36,42 +41,42 @@ export default function LocationPickerPage() {
   }
 
   // This is optimistic updating and roll back if updating API failed
-  async function handleSelectPlace() {
-    // setUserPlaces((prevPickedPlaces) => {
-    //   if (prevPickedPlaces.some((p) => p.id === place.id)) {
-    //     return prevPickedPlaces;
-    //   }
-    //   return [place, ...prevPickedPlaces];
-    // });
-    //
-    // try {
-    //   await updateUserPlaces([place, ...userPlaces]);
-    // } catch (error) {
-    //   console.error(error);
-    //   setErrorUpdatingPlaces({
-    //     message: error instanceof Error ? error.message : 'Failed to update places',
-    //   });
-    //   setUserPlaces(userPlaces);
-    // }
+  async function handleSelectPlace(place: Place) {
+    setUserPlaces((prevPickedPlaces) => {
+      if (prevPickedPlaces.some((p) => p.id === place.id)) {
+        return prevPickedPlaces;
+      }
+      return [place, ...prevPickedPlaces];
+    });
+
+    try {
+      await updateUserPlaces([place, ...userPlaces]);
+    } catch (error) {
+      console.error(error);
+      setErrorUpdatingPlaces({
+        message: error instanceof Error ? error.message : 'Failed to update places',
+      });
+      setUserPlaces(userPlaces);
+    }
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
-    // setUserPlaces((prevPickedPlaces) =>
-    //   prevPickedPlaces.filter((place) => place.id !== selectedPlace.current?.id)
-    // );
-    //
-    // try {
-    //   await updateUserPlaces(
-    //     userPlaces.filter(place => place.id !== selectedPlace.current?.id));
-    // } catch (error) {
-    //   setUserPlaces(userPlaces);
-    //   setErrorUpdatingPlaces({
-    //     message: error instanceof Error ? error.message : 'Failed to remove places',
-    //   });
-    // }
+    setUserPlaces((prevPickedPlaces) =>
+      prevPickedPlaces.filter((place) => place.id !== selectedPlace.current?.id)
+    );
+
+    try {
+      await updateUserPlaces(
+        userPlaces.filter(place => place.id !== selectedPlace.current?.id));
+    } catch (error) {
+      setUserPlaces(userPlaces);
+      setErrorUpdatingPlaces({
+        message: error instanceof Error ? error.message : 'Failed to remove places',
+      });
+    }
 
     setModalIsOpen(false);
-  }, []);
+  }, [setUserPlaces, userPlaces]);
 
   function handleError() {
     setErrorUpdatingPlaces(null);
