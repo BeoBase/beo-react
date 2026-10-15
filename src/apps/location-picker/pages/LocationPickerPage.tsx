@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 import Places, { type Place } from '../components/Places';
 import Modal from '../components/Modal';
@@ -6,7 +6,8 @@ import DeleteConfirmation from '../components/DeleteConfirmation';
 import AvailablePlaces from '../components/AvailablePlaces';
 import ErrorMessage from "../components/ErrorMessage.tsx";
 
-import {fetchUserPlaces, updateUserPlaces} from "../http.ts";
+import {fetchUserPlaces} from "../http.ts";
+import {useFetch} from "../hooks/useFetch.ts";
 
 import logoImg from '../assets/logo.png';
 import classes from '../styles/location-picker.module.scss';
@@ -19,27 +20,11 @@ export default function LocationPickerPage() {
 
   const selectedPlace = useRef<Place | null>(null);
 
-  const [userPlaces, setUserPlaces] = useState<Place[]>([]);
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState<{ message: string } | null>(null);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<{ message: string } | null>(null);
-
-  useEffect(() => {
-    async function fetchPlaces() {
-      setIsFetching(true);
-      try {
-        const places = await fetchUserPlaces();
-        setUserPlaces(places);
-      } catch (error) {
-        setError({ message: error instanceof Error ? error.message : 'Failed to fetch user places.'});
-      }
-      setIsFetching(false);
-    }
-    fetchPlaces();
-  }, []);
+  const {isFetching, error, fetchedData: userPlaces} = useFetch(fetchUserPlaces, []);
 
   function handleStartRemovePlace(place: Place) {
     setModalIsOpen(true);
@@ -51,44 +36,42 @@ export default function LocationPickerPage() {
   }
 
   // This is optimistic updating and roll back if updating API failed
-  async function handleSelectPlace(place: Place) {
-    setUserPlaces((prevPickedPlaces) => {
-      if (prevPickedPlaces.some((p) => p.id === place.id)) {
-        return prevPickedPlaces;
-      }
-      return [place, ...prevPickedPlaces];
-    });
-
-    try {
-      await updateUserPlaces([place, ...userPlaces]);
-    } catch (error) {
-      console.error(error);
-      setErrorUpdatingPlaces({
-        message: error instanceof Error ? error.message : 'Failed to update places',
-      });
-      setUserPlaces(userPlaces);
-    }
+  async function handleSelectPlace() {
+    // setUserPlaces((prevPickedPlaces) => {
+    //   if (prevPickedPlaces.some((p) => p.id === place.id)) {
+    //     return prevPickedPlaces;
+    //   }
+    //   return [place, ...prevPickedPlaces];
+    // });
+    //
+    // try {
+    //   await updateUserPlaces([place, ...userPlaces]);
+    // } catch (error) {
+    //   console.error(error);
+    //   setErrorUpdatingPlaces({
+    //     message: error instanceof Error ? error.message : 'Failed to update places',
+    //   });
+    //   setUserPlaces(userPlaces);
+    // }
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
-    setUserPlaces((prevPickedPlaces) =>
-      prevPickedPlaces.filter((place) => place.id !== selectedPlace.current?.id)
-    );
-
-    try {
-      await updateUserPlaces(
-        userPlaces.filter(place => place.id !== selectedPlace.current?.id));
-    } catch (error) {
-      setUserPlaces(userPlaces);
-      setErrorUpdatingPlaces({
-        message: error instanceof Error ? error.message : 'Failed to remove places',
-      });
-    }
-
-
+    // setUserPlaces((prevPickedPlaces) =>
+    //   prevPickedPlaces.filter((place) => place.id !== selectedPlace.current?.id)
+    // );
+    //
+    // try {
+    //   await updateUserPlaces(
+    //     userPlaces.filter(place => place.id !== selectedPlace.current?.id));
+    // } catch (error) {
+    //   setUserPlaces(userPlaces);
+    //   setErrorUpdatingPlaces({
+    //     message: error instanceof Error ? error.message : 'Failed to remove places',
+    //   });
+    // }
 
     setModalIsOpen(false);
-  }, [userPlaces]);
+  }, []);
 
   function handleError() {
     setErrorUpdatingPlaces(null);
@@ -123,7 +106,10 @@ export default function LocationPickerPage() {
         </p>
       </header>
       <main>
-        {error && <ErrorMessage title="An error occured!" message={error.message}/>}
+        {error && <ErrorMessage
+          title="An error occured!"
+          message={error.message}
+        />}
         {!error && <Places
           title="I'd like to visit ..."
           fallbackText="Select the places you would like to visit below."
@@ -133,7 +119,9 @@ export default function LocationPickerPage() {
           loadingText="Fetch user places..."
         />}
 
-        <AvailablePlaces onSelectPlace={handleSelectPlace} />
+        <AvailablePlaces
+          onSelectPlace={handleSelectPlace}
+        />
       </main>
     </div>
   );
