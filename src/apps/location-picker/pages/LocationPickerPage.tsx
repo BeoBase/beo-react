@@ -71,7 +71,7 @@ export default function LocationPickerPage() {
     // }
 
     setModalIsOpen(false);
-  }, [userPlaces]);
+  }, []);
 
   function handleError() {
     setErrorUpdatingPlaces(null);
