@@ -101,6 +101,6 @@ describe('AvailablePlaces', () => {
 
     render(<AvailablePlaces onSelectPlace={vi.fn()} />);
 
-    expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
+    expect(await screen.findByText('Failed to fetch data.')).toBeInTheDocument();
   });
 });
