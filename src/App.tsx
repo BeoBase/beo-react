@@ -14,6 +14,7 @@ import QuizPage from "./apps/quiz/pages/QuizPage.tsx"
 import CounterPage from "./apps/counter/pages/CounterPage.tsx";
 import UserPage from "./apps/user/pages/UserPage.tsx";
 import LocationPickerPage from "./apps/location-picker/pages/LocationPickerPage.tsx";
+import UserInputPage from "./apps/user-input/pages/UserInputPage.tsx";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/counter" element={<CounterPage />} />
         <Route path="/user" element={<UserPage />} />
+        <Route path="/user-input" element={<UserInputPage />} />
         <Route path="/location-picker" element={<LocationPickerPage />} />
         
         {/* Protected Routes - Generated Dynamically */}
