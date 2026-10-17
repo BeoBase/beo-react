@@ -1,5 +1,3 @@
-import {useEffect, useState} from "react";
-
 import {sortPlacesByDistance} from "../loc.ts";
 import {fetchAvailablePlaces} from '../http.ts';
 import {useFetch} from '../hooks/useFetch.ts';
@@ -7,15 +5,21 @@ import {useFetch} from '../hooks/useFetch.ts';
 import Places, {type Place} from './Places';
 import ErrorMessage from "./ErrorMessage";
 
+async function fetchSortedPlaces(): Promise<Place[]> {
+  const places = await fetchAvailablePlaces();
+
+  return new Promise(resolve => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance<Place & { lat: number; lon: number }>(
+          places, position.coords.latitude, position.coords.longitude);
+      resolve(sortedPlaces);
+    });
+  })
+}
+
 interface AvailablePlacesProps {
   onSelectPlace: (place: Place) => void;
 }
-
-// navigator.geolocation.getCurrentPosition((position) => {
-//   const sortedPlaces = sortPlacesByDistance<Place & { lat: number; lon: number }>(
-//       places, position.coords.latitude, position.coords.longitude);
-//   setAvailablePlaces(sortedPlaces);
-// });
 
 export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps) {
 
@@ -23,8 +27,7 @@ export default function AvailablePlaces({ onSelectPlace }: AvailablePlacesProps)
     isFetching,
     error,
     fetchedData: availablePlaces,
-    setFetchedData: setAvailablePlaces,
-  } = useFetch<Place[]>(fetchAvailablePlaces, []);
+  } = useFetch<Place[]>(fetchSortedPlaces, []);
 
   if (error) {
     return <ErrorMessage
