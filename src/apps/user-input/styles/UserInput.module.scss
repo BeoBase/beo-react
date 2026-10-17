@@ -20,6 +20,9 @@ $font-heading: 'Quicksand', sans-serif;
   text-align: center;
 
   img {
+    // Tailwind's preflight sets img to display: block, so text-align can't center it
+    display: block;
+    margin: 0 auto;
     width: 5rem;
     height: 5rem;
     object-fit: contain;
@@ -46,6 +49,13 @@ $font-heading: 'Quicksand', sans-serif;
   background: linear-gradient(180deg, #253c3c, #1d4949);
   border-radius: 8px;
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+
+  // Tailwind's preflight resets heading sizes, so restore the h2 look
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
 }
 
 .control,
