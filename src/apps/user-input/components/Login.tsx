@@ -25,7 +25,7 @@ export default function Login() {
 
             <div className={classes.formActions}>
                 <button className={`${classes.button} ${classes.buttonFlat}`}>Reset</button>
-                <button className={classes.button} onClick={handleSubmit}>
+                <button className={classes.button}>
                     Login
                 </button>
             </div>
