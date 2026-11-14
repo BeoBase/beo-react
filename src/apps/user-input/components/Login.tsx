@@ -2,7 +2,7 @@ import classes from '../styles/UserInput.module.scss';
 
 export default function Login() {
 
-    function handleSubmit(event) {
+    function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submitted!");
     }
