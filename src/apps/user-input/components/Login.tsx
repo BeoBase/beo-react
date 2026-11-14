@@ -1,8 +1,14 @@
 import classes from '../styles/UserInput.module.scss';
 
 export default function Login() {
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        console.log("Submitted!");
+    }
+
     return (
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleSubmit}>
             <h2>Login</h2>
 
             <div className={classes.controlRow}>
@@ -18,8 +24,10 @@ export default function Login() {
             </div>
 
             <div className={classes.formActions}>
-                <button type="reset" className={`${classes.button} ${classes.buttonFlat}`}>Reset</button>
-                <button type="submit" className={classes.button}>Login</button>
+                <button className={`${classes.button} ${classes.buttonFlat}`}>Reset</button>
+                <button className={classes.button} onClick={handleSubmit}>
+                    Login
+                </button>
             </div>
         </form>
     );
