@@ -4,14 +4,21 @@ import {useState} from "react";
 export default function Login() {
 
     const [enteredEmail, setEnteredEmail] = useState('');
+    const [enteredPassword, setEnteredPassword] = useState('');
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
-        console.log("Submitted!");
+        console.log("Submit button clicked!");
+        console.log('Entered email: ', enteredEmail);
+        console.log('Entered password: ', enteredPassword);
     }
 
     function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
         setEnteredEmail(event.currentTarget.value);
+    }
+
+    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setEnteredPassword(event.currentTarget.value);
     }
 
     return (
@@ -32,7 +39,13 @@ export default function Login() {
 
                 <div className={`${classes.control} ${classes.noMargin}`}>
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" />
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        onChange={handlePasswordChange}
+                        value={enteredPassword}
+                    />
                 </div>
             </div>
 
