@@ -37,7 +37,12 @@ export default function SignUp() {
             <div className={classes.controlRow}>
                 <div className={classes.control}>
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" required minLength={6} />
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
+                        minLength={6} />
                 </div>
 
                 <div className={classes.control}>
