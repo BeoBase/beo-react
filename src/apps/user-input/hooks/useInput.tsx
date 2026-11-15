@@ -1,11 +1,11 @@
-import {useState} from "react";
+import {useState, type ChangeEvent} from "react";
 
-export function useInput(defaultValue) {
+export function useInput(defaultValue: string) {
 
     const [enteredValue, setEnteredValue] = useState(defaultValue);
     const [didEdit, setDidEdit] = useState(false);
 
-    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         setEnteredValue(event.target.value);
         setDidEdit(false);
     }
