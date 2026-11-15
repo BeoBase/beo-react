@@ -1,9 +1,14 @@
 import {useState, type ChangeEvent} from "react";
 
-export function useInput(defaultValue: string) {
+export function useInput(
+    defaultValue: string,
+    validationFn: (value: string) => boolean
+) {
 
     const [enteredValue, setEnteredValue] = useState(defaultValue);
     const [didEdit, setDidEdit] = useState(false);
+
+    const valueIsValid = validationFn(enteredValue);
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         setEnteredValue(event.target.value);
@@ -18,5 +23,6 @@ export function useInput(defaultValue: string) {
         value: enteredValue,
         handleInputChange,
         handleInputBlur,
+        hasError: didEdit && !valueIsValid,
     };
 }
