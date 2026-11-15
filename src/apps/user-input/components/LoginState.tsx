@@ -1,5 +1,7 @@
-import classes from '../styles/UserInput.module.scss';
 import {useState} from "react";
+import Input from './Input';
+
+import classes from '../styles/UserInput.module.scss';
 
 export default function Login() {
 
@@ -15,6 +17,7 @@ export default function Login() {
 
     const emailIsInvalid = didEdit.email
         && !enteredValues.email.includes('@');
+    const passwordIsInvalid = didEdit.password && enteredValues.password.trim().length < 6;
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -47,38 +50,29 @@ export default function Login() {
             <h2>Login</h2>
 
             <div className={classes.controlRow}>
-                <div className={`${classes.control} ${classes.noMargin}`}>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        onBlur={() => handleInputBlur('email')}
-                        onChange={(event) =>
-                            handleInputChange('email', event)}
-                        value={enteredValues.email}
-                    />
-                    {/*<div className={classes.controlError}>*/}
-                    {/*    <p>{emailIsInvalid ? 'Please enter a valid email address.' : ''}</p>*/}
-                    {/*</div>*/}
+                <Input
+                    label="Email"
+                    id="email"
+                    type="email"
+                    name="email"
+                    onBlur={() => handleInputBlur('email')}
+                    onChange={(event) =>
+                        handleInputChange('email', event)}
+                    value={enteredValues.email}
+                    error={emailIsInvalid ? 'Please enter a valid email.' : undefined}
+                />
 
-                    <div className={classes.controlError}>
-                        <p hidden={!emailIsInvalid}>Please enter a valid email address.</p>
-                    </div>
-                </div>
-
-                <div className={`${classes.control} ${classes.noMargin}`}>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        onBlur={() => handleInputBlur('password')}
-                        onChange={(event) =>
-                            handleInputChange('password', event)}
-                        value={enteredValues.password}
-                    />
-                </div>
+                <Input
+                    label="Password"
+                    id="password"
+                    type="password"
+                    name="password"
+                    onBlur={() => handleInputBlur('password')}
+                    onChange={(event) =>
+                        handleInputChange('password', event)}
+                    value={enteredValues.password}
+                    error={passwordIsInvalid ? 'Please enter a valid password.' : undefined}
+                />
             </div>
 
             <div className={classes.formActions}>

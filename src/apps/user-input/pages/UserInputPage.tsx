@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 
 import Header from '../components/Header';
-// import Login from '../components/Login';
-import SignUp from '../components/SignUp';
+import Login from '../components/LoginState';
+// import SignUp from '../components/SignUp';
 
 import classes from '../styles/UserInput.module.scss';
 
@@ -16,7 +16,7 @@ function UserInputPage() {
             <Header />
             <main>
                 {/*<Login />*/}
-                <SignUp />
+                <Login />
             </main>
         </div>
     );
