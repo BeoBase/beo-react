@@ -4,11 +4,16 @@ import {useState} from "react";
 export default function Login() {
 
     const [enteredValues, setEnteredValues] = useState({
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     });
 
-    const emailIsInvalid = enteredValues.email !== ''
+    const [didEdit, setDidEdit] = useState({
+        email: false,
+        password: false,
+    });
+
+    const emailIsInvalid = didEdit.email
         && !enteredValues.email.includes('@');
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
@@ -23,6 +28,18 @@ export default function Login() {
             ...prevValues,
             [identifier]: event.target.value,
         }))
+
+        setDidEdit(prevEdit => ({
+            ...prevEdit,
+            [identifier]: false,
+        }))
+    }
+
+    function handleInputBlur(identifier: 'email' | 'password') {
+        setDidEdit(prevEdit => ({
+            ...prevEdit,
+            [identifier]: true,
+        }))
     }
 
     return (
@@ -36,14 +53,17 @@ export default function Login() {
                         id="email"
                         type="email"
                         name="email"
+                        onBlur={() => handleInputBlur('email')}
                         onChange={(event) =>
                             handleInputChange('email', event)}
                         value={enteredValues.email}
                     />
+                    {/*<div className={classes.controlError}>*/}
+                    {/*    <p>{emailIsInvalid ? 'Please enter a valid email address.' : ''}</p>*/}
+                    {/*</div>*/}
+
                     <div className={classes.controlError}>
-                        {emailIsInvalid && <p>
-                            Please enter a valid email address.
-                        </p>}
+                        <p hidden={!emailIsInvalid}>Please enter a valid email address.</p>
                     </div>
                 </div>
 
@@ -53,6 +73,7 @@ export default function Login() {
                         id="password"
                         type="password"
                         name="password"
+                        onBlur={() => handleInputBlur('password')}
                         onChange={(event) =>
                             handleInputChange('password', event)}
                         value={enteredValues.password}
