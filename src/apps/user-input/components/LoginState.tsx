@@ -8,7 +8,8 @@ export default function Login() {
         password: "",
     });
 
-    const emailIsInvalid = !enteredValues.email.includes('@');
+    const emailIsInvalid = enteredValues.email !== ''
+        && !enteredValues.email.includes('@');
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
