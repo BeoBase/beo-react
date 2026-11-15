@@ -7,7 +7,10 @@ export default function SignUp() {
 
         // Browser provides this FormData
         const fd = new FormData(event.currentTarget);
-        const data = Object.fromEntries(fd.entries());
+        const data = {
+            ...Object.fromEntries(fd.entries()),
+            acquisition: fd.getAll('acquisition'),
+        };
         console.log(data);
     }
 
