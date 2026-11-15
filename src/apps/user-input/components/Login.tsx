@@ -3,22 +3,22 @@ import {useState} from "react";
 
 export default function Login() {
 
-    const [enteredEmail, setEnteredEmail] = useState('');
-    const [enteredPassword, setEnteredPassword] = useState('');
+    const [enteredValues, setEnteredValues] = useState({
+        email: "",
+        password: "",
+    });
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit button clicked!");
-        console.log('Entered email: ', enteredEmail);
-        console.log('Entered password: ', enteredPassword);
+        console.log('Entered email: ', enteredValues.email);
     }
 
-    function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setEnteredEmail(event.currentTarget.value);
-    }
-
-    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setEnteredPassword(event.currentTarget.value);
+    function handleInputChange(identifier: 'email' | 'password', event: React.ChangeEvent<HTMLInputElement>) {
+        setEnteredValues(prevValues => ({
+            ...prevValues,
+            [identifier]: event.target.value,
+        }))
     }
 
     return (
@@ -32,8 +32,9 @@ export default function Login() {
                         id="email"
                         type="email"
                         name="email"
-                        onChange={handleEmailChange}
-                        value={enteredEmail}
+                        onChange={(event) =>
+                            handleInputChange('email', event)}
+                        value={enteredValues.email}
                     />
                 </div>
 
@@ -43,8 +44,9 @@ export default function Login() {
                         id="password"
                         type="password"
                         name="password"
-                        onChange={handlePasswordChange}
-                        value={enteredPassword}
+                        onChange={(event) =>
+                            handleInputChange('password', event)}
+                        value={enteredValues.password}
                     />
                 </div>
             </div>
