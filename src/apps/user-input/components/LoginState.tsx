@@ -8,6 +8,8 @@ export default function Login() {
         password: "",
     });
 
+    const emailIsInvalid = !enteredValues.email.includes('@');
+
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit button clicked!");
@@ -37,6 +39,11 @@ export default function Login() {
                             handleInputChange('email', event)}
                         value={enteredValues.email}
                     />
+                    <div className={classes.controlError}>
+                        {emailIsInvalid && <p>
+                            Please enter a valid email address.
+                        </p>}
+                    </div>
                 </div>
 
                 <div className={`${classes.control} ${classes.noMargin}`}>
