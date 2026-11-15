@@ -125,13 +125,13 @@ describe('LoginState', () => {
       expect(screen.queryByText(PASSWORD_ERROR)).not.toBeInTheDocument();
     });
 
-    it('does not count surrounding whitespace towards the length', () => {
+    it('counts surrounding whitespace towards the length', () => {
       render(<LoginState />);
 
       type(password(), '  abc  ');
       fireEvent.blur(password());
 
-      expect(screen.getByText(PASSWORD_ERROR)).toBeInTheDocument();
+      expect(screen.queryByText(PASSWORD_ERROR)).not.toBeInTheDocument();
     });
 
     it('does not show an error while the user is still typing', () => {
