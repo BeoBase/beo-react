@@ -29,33 +29,26 @@ function groupByTag(apps: AppData[]): [string, AppData[]][] {
 export default function AppList({ apps }: AppListProps) {
   if (apps.length === 0) {
     return (
-      <section className="mx-auto my-2 w-full max-w-6xl shadow-xl">
-        <Card>
-          <p className="text-center text-stone-100">No apps found.</p>
-        </Card>
-      </section>
+      <Card layout="page">
+        <p className="text-center text-stone-100">No apps found.</p>
+      </Card>
     );
   }
 
   return (
     <>
       {groupByTag(apps).map(([tag, tagApps]) => (
-        <section
-          key={tag}
-          className="mx-auto my-2 w-full max-w-6xl text-center shadow-xl"
-        >
-          <Card>
-            <h2 className="mb-2 block text-2xl font-bold tracking-wide text-white drop-shadow-sm">
-              {tag}
-            </h2>
+        <Card key={tag} layout="page" className="text-center">
+          <h2 className="mb-2 block text-2xl font-bold tracking-wide text-white drop-shadow-sm">
+            {tag}
+          </h2>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              {tagApps.map((app) => (
-                <AppButton key={app.name} app={app} />
-              ))}
-            </div>
-          </Card>
-        </section>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {tagApps.map((app) => (
+              <AppButton key={app.name} app={app} />
+            ))}
+          </div>
+        </Card>
       ))}
     </>
   );

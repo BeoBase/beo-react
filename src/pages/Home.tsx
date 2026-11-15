@@ -39,7 +39,7 @@ export default function Home() {
     <>
       <AppList apps={appsData} />
       
-      <Card>
+      <Card layout="page">
         <div className="flex flex-1 flex-col place-content-center place-items-center gap-6.25 max-lg:gap-4.5 max-lg:px-5 max-lg:pt-8 max-lg:pb-6">
           <Button
             type="button"
