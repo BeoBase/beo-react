@@ -181,5 +181,90 @@ describe('LoginState', () => {
 
       expect(notPrevented).toBe(false);
     });
+
+    it('sends the request when both fields are valid', () => {
+      const { container } = render(<LoginState />);
+
+      type(email(), 'a@b.com');
+      type(password(), 'secret1');
+      fireEvent.submit(container.querySelector('form')!);
+
+      expect(consoleLog).toHaveBeenCalledWith('Sending HTTPS request...');
+      expect(screen.queryByText(EMAIL_ERROR)).not.toBeInTheDocument();
+      expect(screen.queryByText(PASSWORD_ERROR)).not.toBeInTheDocument();
+    });
+
+    it('does not send the request when the fields were never touched', () => {
+      const { container } = render(<LoginState />);
+
+      fireEvent.submit(container.querySelector('form')!);
+
+      expect(consoleLog).not.toHaveBeenCalledWith('Sending HTTPS request...');
+    });
+
+    it('shows both errors when submitting without touching the fields', () => {
+      const { container } = render(<LoginState />);
+
+      fireEvent.submit(container.querySelector('form')!);
+
+      expect(screen.getByText(EMAIL_ERROR)).toBeInTheDocument();
+      expect(screen.getByText(PASSWORD_ERROR)).toBeInTheDocument();
+    });
+
+    it('does not send the request when the email is invalid, even without leaving the field', () => {
+      const { container } = render(<LoginState />);
+
+      type(email(), 'no-at-sign');
+      type(password(), 'secret1');
+      fireEvent.submit(container.querySelector('form')!);
+
+      expect(consoleLog).not.toHaveBeenCalledWith('Sending HTTPS request...');
+      expect(screen.getByText(EMAIL_ERROR)).toBeInTheDocument();
+    });
+
+    it('does not send the request when the password is too short', () => {
+      const { container } = render(<LoginState />);
+
+      type(email(), 'a@b.com');
+      type(password(), '123');
+      fireEvent.submit(container.querySelector('form')!);
+
+      expect(consoleLog).not.toHaveBeenCalledWith('Sending HTTPS request...');
+      expect(screen.getByText(PASSWORD_ERROR)).toBeInTheDocument();
+    });
+  });
+
+  describe('reset', () => {
+    it('clears both fields', () => {
+      render(<LoginState />);
+
+      type(email(), 'a@b.com');
+      type(password(), 'secret1');
+      fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+
+      expect(email()).toHaveValue('');
+      expect(password()).toHaveValue('');
+    });
+
+    it('clears the errors', () => {
+      render(<LoginState />);
+
+      fireEvent.blur(email());
+      fireEvent.blur(password());
+      expect(screen.getByText(EMAIL_ERROR)).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+
+      expect(screen.queryByText(EMAIL_ERROR)).not.toBeInTheDocument();
+      expect(screen.queryByText(PASSWORD_ERROR)).not.toBeInTheDocument();
+    });
+
+    it('does not submit the form', () => {
+      render(<LoginState />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+
+      expect(consoleLog).not.toHaveBeenCalledWith('Submit button clicked!');
+    });
   });
 });

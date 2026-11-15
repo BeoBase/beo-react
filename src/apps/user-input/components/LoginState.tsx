@@ -10,34 +10,40 @@ export default function Login() {
         value: emailValue,
         handleInputChange: handleEmailChange,
         handleInputBlur: handleEmailBlur,
+        reset: resetEmail,
         hasError: emailHasError,
-    } = useInput('', (value) => {
-        //... many functions here
-        return isEmail(value);
-    });
+        isValid: emailIsValid,
+    } = useInput('', isEmail);
 
     const {
         value: passwordValue,
         handleInputChange: handlePasswordChange,
         handleInputBlur: handlePasswordBlur,
+        reset: resetPassword,
         hasError: passwordHasError,
-    } = useInput('', (value) => {
-        //... many functions here
-        return hasMinLength(value, 6);
-    });
+        isValid: passwordIsValid,
+    } = useInput('', (value) => hasMinLength(value, 6));
 
-    function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
+    function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit button clicked!");
         console.log('Entered email: ', emailValue);
         console.log('Entered password: ', passwordValue);
 
-        if (emailHasError || passwordHasError) {
+        if (!emailIsValid || !passwordIsValid) {
+            // Mark both fields as edited so their errors show up.
+            handleEmailBlur();
+            handlePasswordBlur();
             console.log('Invalid data');
             return;
         }
 
         console.log('Sending HTTPS request...');
+    }
+
+    function handleReset() {
+        resetEmail();
+        resetPassword();
     }
 
     return (
@@ -69,8 +75,14 @@ export default function Login() {
             </div>
 
             <div className={classes.formActions}>
-                <button className={`${classes.button} ${classes.buttonFlat}`}>Reset</button>
-                <button className={classes.button}>
+                <button
+                    type="button"
+                    className={`${classes.button} ${classes.buttonFlat}`}
+                    onClick={handleReset}
+                >
+                    Reset
+                </button>
+                <button type="submit" className={classes.button}>
                     Login
                 </button>
             </div>
