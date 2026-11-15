@@ -1,6 +1,9 @@
 import classes from '../styles/UserInput.module.scss';
+import {useState} from "react";
 
 export default function SignUp() {
+
+    const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState<boolean>(false);
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event?.preventDefault();
@@ -11,6 +14,13 @@ export default function SignUp() {
             ...Object.fromEntries(fd.entries()),
             acquisition: fd.getAll('acquisition'),
         };
+
+        if (fd.get('password') !== fd.get('confirm-password')) {
+            setPasswordsAreNotEqual(true);
+            return;
+        }
+
+        setPasswordsAreNotEqual(false);
         console.log(data);
     }
 
@@ -27,7 +37,12 @@ export default function SignUp() {
             <div className={classes.controlRow}>
                 <div className={classes.control}>
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" required minLength={6} />
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
+                        minLength={6} />
                 </div>
 
                 <div className={classes.control}>
@@ -38,6 +53,11 @@ export default function SignUp() {
                         name="confirm-password"
                         required
                     />
+                    <div className={classes.controlError}>
+                        {passwordsAreNotEqual && <p>
+                            Passwords must match.
+                        </p>}
+                    </div>
                 </div>
             </div>
 
