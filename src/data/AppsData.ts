@@ -1,7 +1,3 @@
-// Flat list of apps. Each button from the old BoxesHome.ts is now its own app.
-// - `tag`  : replaces the old group title (folder)
-// - `href` : external link
-// - `to`   : internal route / link placeholder
 export type AppData = {
   name: string;
   tag: string;
