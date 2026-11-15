@@ -1,25 +1,20 @@
 import classes from '../styles/UserInput.module.scss';
-import {useState} from "react";
+import {useRef} from "react";
 
 export default function Login() {
 
-    const [enteredValues, setEnteredValues] = useState({
-        email: "",
-        password: "",
-    });
+    const email = useRef<HTMLInputElement>(null);
+    const password = useRef<HTMLInputElement>(null);
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
-        console.log("Submit button clicked!");
-        console.log('Entered email: ', enteredValues.email);
-        console.log('Entered password: ', enteredValues.password);
-    }
 
-    function handleInputChange(identifier: 'email' | 'password', event: React.ChangeEvent<HTMLInputElement>) {
-        setEnteredValues(prevValues => ({
-            ...prevValues,
-            [identifier]: event.target.value,
-        }))
+        const enteredEmail = email.current?.value ?? '';
+        const enteredPassword = password.current?.value ?? '';
+
+        console.log("Submit button clicked!");
+        console.log('Entered email: ', enteredEmail);
+        console.log('Entered password: ', enteredPassword);
     }
 
     return (
@@ -33,9 +28,7 @@ export default function Login() {
                         id="email"
                         type="email"
                         name="email"
-                        onChange={(event) =>
-                            handleInputChange('email', event)}
-                        value={enteredValues.email}
+                        ref={email}
                     />
                 </div>
 
@@ -45,9 +38,7 @@ export default function Login() {
                         id="password"
                         type="password"
                         name="password"
-                        onChange={(event) =>
-                            handleInputChange('password', event)}
-                        value={enteredValues.password}
+                        ref={password}
                     />
                 </div>
             </div>
