@@ -4,17 +4,25 @@ import { MemoryRouter } from "react-router-dom";
 import AppButton from "./AppButton";
 
 describe("AppButton", () => {
-  it("renders the app name and tag inside one link", () => {
+  it("renders the app name as a single link", () => {
     render(
       <MemoryRouter>
         <AppButton app={{ name: "Bank", tag: "Cashflow Tracking", to: "/bank" }} />
       </MemoryRouter>
     );
 
-    const link = screen.getByRole("link", { name: /Bank/ });
-    expect(link).toHaveTextContent("Bank");
-    expect(link).toHaveTextContent("Cashflow Tracking");
+    expect(screen.getByRole("link", { name: "Bank" })).toBeInTheDocument();
     expect(screen.getAllByRole("link")).toHaveLength(1);
+  });
+
+  it("does not show the tag (the group heading does that)", () => {
+    render(
+      <MemoryRouter>
+        <AppButton app={{ name: "Bank", tag: "Cashflow Tracking", to: "/bank" }} />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText("Cashflow Tracking")).not.toBeInTheDocument();
   });
 
   it("renders an internal link using 'to'", () => {

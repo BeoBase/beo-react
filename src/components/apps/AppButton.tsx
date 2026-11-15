@@ -7,24 +7,15 @@ type AppButtonProps = {
 };
 
 export default function AppButton({ app, className = "" }: AppButtonProps) {
-  const rowClassName = `flex w-full items-center justify-between gap-4 rounded-lg
-    bg-blue-700 px-4 py-3 text-left font-medium text-white shadow-sm
+  const buttonClassName = `flex h-12 w-44 items-center justify-center rounded-lg
+    bg-blue-700 px-4 text-center font-medium text-white shadow-sm
     transition-all hover:bg-blue-500 hover:shadow-lg ${className}`;
-
-  const content = (
-    <>
-      <span className="truncate">{app.name}</span>
-      <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold tracking-wide">
-        {app.tag}
-      </span>
-    </>
-  );
 
   // Internal route -> router Link (no page reload)
   if (app.to) {
     return (
-      <Link to={app.to} className={rowClassName}>
-        {content}
+      <Link to={app.to} className={buttonClassName}>
+        {app.name}
       </Link>
     );
   }
@@ -35,9 +26,9 @@ export default function AppButton({ app, className = "" }: AppButtonProps) {
       href={app.href}
       target="_blank"
       rel="noopener noreferrer"
-      className={rowClassName}
+      className={buttonClassName}
     >
-      {content}
+      {app.name}
     </a>
   );
 }
