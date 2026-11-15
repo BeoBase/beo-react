@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import Card from "./Card";
+import classes from "./Card.module.scss";
 
 describe("Card", () => {
   it("renders its children", () => {
@@ -20,20 +21,22 @@ describe("Card", () => {
     expect(container.querySelector("section")).toBeInTheDocument();
   });
 
-  it("applies the default card styling", () => {
+  it("applies the shared card style", () => {
     const { container } = render(<Card>Content</Card>);
 
-    expect(container.firstChild).toHaveClass(
-      "rounded-2xl",
-      "border",
-      "bg-black/30",
-      "shadow-xl",
-    );
+    expect(container.firstChild).toHaveClass(classes.card);
+    expect(container.firstChild).not.toHaveClass(classes.page);
   });
 
-  it("adds a custom className alongside the default styling", () => {
+  it("applies the page layout when asked", () => {
+    const { container } = render(<Card layout="page">Content</Card>);
+
+    expect(container.firstChild).toHaveClass(classes.card, classes.page);
+  });
+
+  it("adds a custom className alongside the shared style", () => {
     const { container } = render(<Card className="max-w-md p-8">Content</Card>);
 
-    expect(container.firstChild).toHaveClass("max-w-md", "p-8", "rounded-2xl");
+    expect(container.firstChild).toHaveClass("max-w-md", "p-8", classes.card);
   });
 });

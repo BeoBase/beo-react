@@ -1,0 +1,19 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  // The look: glass panel.
+  .card {
+    width: 100%;
+    padding: 1.5rem;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: 1rem;
+    background-color: rgb(0 0 0 / 0.3);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    backdrop-filter: blur(12px);
+  }
+
+  .page {
+    width: min(100% - 3rem, 69rem);
+    margin: 0.5rem auto;
+  }
+}
