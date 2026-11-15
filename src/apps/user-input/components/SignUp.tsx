@@ -21,13 +21,13 @@ export default function SignUp() {
 
             <div className={classes.control}>
                 <label htmlFor="email">Email</label>
-                <input id="email" type="email" name="email" />
+                <input id="email" type="email" name="email" required />
             </div>
 
             <div className={classes.controlRow}>
                 <div className={classes.control}>
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" />
+                    <input id="password" type="password" name="password" required minLength={6} />
                 </div>
 
                 <div className={classes.control}>
@@ -36,6 +36,7 @@ export default function SignUp() {
                         id="confirm-password"
                         type="password"
                         name="confirm-password"
+                        required
                     />
                 </div>
             </div>
@@ -45,18 +46,18 @@ export default function SignUp() {
             <div className={classes.controlRow}>
                 <div className={classes.control}>
                     <label htmlFor="first-name">First Name</label>
-                    <input type="text" id="first-name" name="first-name" />
+                    <input type="text" id="first-name" name="first-name" required />
                 </div>
 
                 <div className={classes.control}>
                     <label htmlFor="last-name">Last Name</label>
-                    <input type="text" id="last-name" name="last-name" />
+                    <input type="text" id="last-name" name="last-name" required />
                 </div>
             </div>
 
             <div className={classes.control}>
                 <label htmlFor="role">What best describes your role?</label>
-                <select id="role" name="role">
+                <select id="role" name="role" required>
                     <option value="student">Student</option>
                     <option value="teacher">Teacher</option>
                     <option value="employee">Employee</option>
@@ -94,7 +95,7 @@ export default function SignUp() {
             </fieldset>
 
             <div className={classes.control}>
-                <input type="checkbox" id="terms-and-conditions" name="terms" />
+                <input type="checkbox" id="terms-and-conditions" name="terms" required />
                 <label htmlFor="terms-and-conditions">
                     I agree to the terms and conditions
                 </label>
