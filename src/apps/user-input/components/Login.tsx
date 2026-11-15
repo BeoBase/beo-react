@@ -1,20 +1,30 @@
 import classes from '../styles/UserInput.module.scss';
-import {useRef} from "react";
+import {useRef, useState} from "react";
 
 export default function Login() {
 
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
 
+    const [emailIsInvalid, setEmailIsInvalid] = useState<boolean>(false);
+
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
+        console.log("Submit button clicked!");
         event.preventDefault();
 
         const enteredEmail = email.current?.value ?? '';
         const enteredPassword = password.current?.value ?? '';
-
-        console.log("Submit button clicked!");
         console.log('Entered email: ', enteredEmail);
         console.log('Entered password: ', enteredPassword);
+
+        const emailIsValid = enteredEmail.includes('@');
+        if (!emailIsValid) {
+            setEmailIsInvalid(true);
+            return;
+        }
+
+        setEmailIsInvalid(false);
+        console.log('Mocking sending HTTPS request...');
     }
 
     return (
@@ -30,6 +40,11 @@ export default function Login() {
                         name="email"
                         ref={email}
                     />
+                    <div className={classes.controlError}>
+                        {emailIsInvalid && <p>
+                            Please enter a valid email address.
+                        </p>}
+                    </div>
                 </div>
 
                 <div className={`${classes.control} ${classes.noMargin}`}>
