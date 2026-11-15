@@ -1,7 +1,7 @@
 import {useState} from "react";
 import Input from './Input';
 
-import {isEmail, isNotEmpty, hasMinLength} from '../utils/validation.ts';
+import {isEmail, hasMinLength} from '../utils/validation.ts';
 import classes from '../styles/UserInput.module.scss';
 
 export default function Login() {
@@ -16,7 +16,7 @@ export default function Login() {
         password: false,
     });
 
-    const emailIsInvalid = didEdit.email && !isEmail(enteredValues.email) && !isNotEmpty(enteredValues.email);
+    const emailIsInvalid = didEdit.email && !isEmail(enteredValues.email);
     const passwordIsInvalid = didEdit.password && !hasMinLength(enteredValues.password, 6);
 
     function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
