@@ -28,6 +28,11 @@ export default function Login() {
             ...prevValues,
             [identifier]: event.target.value,
         }))
+
+        setDidEdit(prevEdit => ({
+            ...prevEdit,
+            [identifier]: false,
+        }))
     }
 
     function handleInputBlur(identifier: 'email' | 'password') {
