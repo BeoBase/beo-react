@@ -1,3 +1,4 @@
+import type {SyntheticEvent} from "react";
 import Input from './Input';
 import {useInput} from '../hooks/useInput.tsx';
 import {isEmail, hasMinLength} from '../utils/validation.ts';

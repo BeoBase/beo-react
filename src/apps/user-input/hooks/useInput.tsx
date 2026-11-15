@@ -19,10 +19,19 @@ export function useInput(
         setDidEdit(true);
     }
 
+    function reset() {
+        setEnteredValue(defaultValue);
+        setDidEdit(false);
+    }
+
     return {
         value: enteredValue,
         handleInputChange,
         handleInputBlur,
+        reset,
+        // Whether to show an error: only once the user has left the field.
         hasError: didEdit && !valueIsValid,
+        // Whether the current value is valid, regardless of whether it was edited.
+        isValid: valueIsValid,
     };
 }
