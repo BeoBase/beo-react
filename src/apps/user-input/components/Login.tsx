@@ -12,6 +12,7 @@ export default function Login() {
         event.preventDefault();
         console.log("Submit button clicked!");
         console.log('Entered email: ', enteredValues.email);
+        console.log('Entered password: ', enteredValues.password);
     }
 
     function handleInputChange(identifier: 'email' | 'password', event: React.ChangeEvent<HTMLInputElement>) {
