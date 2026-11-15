@@ -5,7 +5,7 @@ import Connect from "../components/footer/Connect.tsx";
 import InfoBox from "../components/infoBox/InfoBox.tsx";
 import Button from "../components/ui/Button.tsx";
 import Card from "../components/ui/Card.tsx";
-import AppButton from "../components/apps/AppButton.tsx";
+import AppList from "../components/apps/AppList.tsx";
 
 import {boxesHomeData} from "../data/BoxesHome.ts";
 import {appsData} from "../data/AppsData.ts";
@@ -39,11 +39,7 @@ export default function Home() {
   
   return (
     <>
-      <div className="mx-auto my-2 flex max-w-6xl flex-col gap-2 px-6">
-        {appsData.map((app) => (
-            <AppButton key={app.name} app={app} />
-        ))}
-      </div>
+      <AppList apps={appsData} />
       
       {boxesHomeData.map((box, index) => (
         <InfoBox
