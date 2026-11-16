@@ -3,11 +3,29 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import AppButton from "./AppButton";
 
+import type { AppData } from "./AppData";
+
+const internalApp: AppData = {
+  id: "aB3xK9pQ2m",
+  name: "Bank",
+  tags: ["Cashflow Tracking"],
+  route: "/bank",
+  routeType: "INTERNAL",
+};
+
+const externalApp: AppData = {
+  id: "xY7mN2kL9q",
+  name: "Jira Board",
+  tags: ["Developments"],
+  route: "https://example.com",
+  routeType: "EXTERNAL",
+};
+
 describe("AppButton", () => {
   it("renders the app name as a single link", () => {
     render(
       <MemoryRouter>
-        <AppButton app={{ name: "Bank", tag: "Cashflow Tracking", to: "/bank" }} />
+        <AppButton app={internalApp} />
       </MemoryRouter>
     );
 
@@ -18,17 +36,17 @@ describe("AppButton", () => {
   it("does not show the tag (the group heading does that)", () => {
     render(
       <MemoryRouter>
-        <AppButton app={{ name: "Bank", tag: "Cashflow Tracking", to: "/bank" }} />
+        <AppButton app={internalApp} />
       </MemoryRouter>
     );
 
     expect(screen.queryByText("Cashflow Tracking")).not.toBeInTheDocument();
   });
 
-  it("renders an internal link using 'to'", () => {
+  it("renders an INTERNAL app as a router link", () => {
     render(
       <MemoryRouter>
-        <AppButton app={{ name: "Bank", tag: "Cashflow", to: "/bank" }} />
+        <AppButton app={internalApp} />
       </MemoryRouter>
     );
 
@@ -37,12 +55,10 @@ describe("AppButton", () => {
     expect(link).not.toHaveAttribute("target");
   });
 
-  it("renders an external link in a new tab using 'href'", () => {
+  it("renders an EXTERNAL app in a new tab", () => {
     render(
       <MemoryRouter>
-        <AppButton
-          app={{ name: "Jira Board", tag: "Developments", href: "https://example.com" }}
-        />
+        <AppButton app={externalApp} />
       </MemoryRouter>
     );
 

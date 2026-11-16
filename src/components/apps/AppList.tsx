@@ -1,22 +1,30 @@
 import Card from "../ui/Card.tsx";
 import AppButton from "./AppButton.tsx";
 
-import type { AppData } from "../../data/AppsData.ts";
+import type { AppData } from "./AppData.ts";
 
 type AppListProps = {
   apps: AppData[];
 };
 
-// Groups the flat list by tag, keeping the order in which each tag first appears.
+// Folder for apps that have no tag, so they are never hidden
+const NO_TAG_FOLDER = "Other";
+
+// Groups the apps by tag, keeping the order in which each tag first appears.
+// An app with several tags shows up in every one of its folders.
 function groupByTag(apps: AppData[]): [string, AppData[]][] {
   const groups = new Map<string, AppData[]>();
 
   for (const app of apps) {
-    const group = groups.get(app.tag);
-    if (group) {
-      group.push(app);
-    } else {
-      groups.set(app.tag, [app]);
+    const tags = app.tags.length > 0 ? app.tags : [NO_TAG_FOLDER];
+
+    for (const tag of tags) {
+      const group = groups.get(tag);
+      if (group) {
+        group.push(app);
+      } else {
+        groups.set(tag, [app]);
+      }
     }
   }
 
@@ -45,7 +53,7 @@ export default function AppList({ apps }: AppListProps) {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             {tagApps.map((app) => (
-              <AppButton key={app.name} app={app} />
+              <AppButton key={app.id} app={app} />
             ))}
           </div>
         </Card>
