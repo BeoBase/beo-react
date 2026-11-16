@@ -12,9 +12,9 @@ export default function NotFound() {
   }, []);
   
   return (
-    <main className="flex min-h-[70vh] items-center justify-center px-6">
-      <Card>
-        <div className="w-full max-w-2xl text-center">
+    <main className="flex flex-1 items-center justify-center px-6 py-12">
+      <Card className="max-w-2xl">
+        <div className="text-center">
           
           {/* Error Code */}
           <p className="text-8xl font-black tracking-tight text-stone-100 sm:text-9xl">
