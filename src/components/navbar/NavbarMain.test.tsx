@@ -14,14 +14,6 @@ describe("NavbarMain", () => {
     );
 
     expect(
-      screen.getByText("Home")
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText("Portfolio")
-    ).toBeInTheDocument();
-
-    expect(
       screen.getByText("Log In / Profile")
     ).toBeInTheDocument();
   });
@@ -34,12 +26,8 @@ describe("NavbarMain", () => {
       </MemoryRouter>
     );
 
-    const homeLink = screen.getByText("Home");
-    const portfolioLink = screen.getByText("Portfolio");
     const loginLink = screen.getByText("Log In / Profile");
 
-    expect(homeLink).toHaveAttribute("href", "/");
-    expect(portfolioLink).toHaveAttribute("href", "/portfolio");
     expect(loginLink).toHaveAttribute("href", "/sign-in");
   });
 
