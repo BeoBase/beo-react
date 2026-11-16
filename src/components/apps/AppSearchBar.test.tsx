@@ -11,6 +11,12 @@ describe("AppSearchBar", () => {
     expect(screen.getByLabelText("Search apps")).toHaveValue("bank");
   });
 
+  it("is focused when it first shows", () => {
+    render(<AppSearchBar value="" onChange={() => {}} />);
+
+    expect(screen.getByLabelText("Search apps")).toHaveFocus();
+  });
+
   it("calls onChange with the typed text", async () => {
     const onChange = vi.fn();
     render(<AppSearchBar value="" onChange={onChange} />);
