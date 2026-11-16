@@ -1,12 +1,15 @@
+const START_YEAR = 2025;
 
 export default function FooterMain() {
-  return (
-    <footer className="w-full border-t border-gray-200 py-5 text-center mt-auto backdrop-blur-xs">
-      <p className="text-sm font-medium text-gray-200 drop-shadow-md">
-        © {new Date().getFullYear()} BeoBase.com. All rights reserved.
-        <br />
-        Author: Bellamy Phan
-      </p>
-    </footer>
-  );
+    const year = new Date().getFullYear();
+    const years = year > START_YEAR ? `${START_YEAR}-${year}` : `${START_YEAR}`;
+
+    return (
+        <footer className="mt-auto border-t border-white/20 bg-black/30 py-5 text-center backdrop-blur-md">
+            <div className="text-sm font-medium text-gray-200 drop-shadow-md">
+                <p>© {years} BeoBase.com. All rights reserved.</p>
+                <p>Dev Lead: Bellamy Tran</p>
+            </div>
+        </footer>
+    );
 }
