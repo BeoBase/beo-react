@@ -11,13 +11,6 @@ export default function NavbarMain() {
           Beo Base
         </AppLink>
         
-        {/* Middle - Main Navigation */}
-        <div className="flex items-center gap-6">
-          <AppLink to="/">Home</AppLink>
-          <AppLink to="/portfolio">Portfolio</AppLink>
-          <AppLink to="/dev">Development</AppLink>
-        </div>
-        
         {/* Right - Actions */}
         <div className="flex items-center gap-6">
           <AppLink to="/sign-in">Log In / Profile</AppLink>

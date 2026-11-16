@@ -7,7 +7,6 @@ import AppSearchBar from "../components/apps/AppSearchBar.tsx";
 import {filterApps} from "../components/apps/filterApps.ts";
 import {useApps} from "../components/apps/useApps.ts";
 
-
 export default function Home() {
 
   const {apps, isLoading, error: appsError} = useApps();
