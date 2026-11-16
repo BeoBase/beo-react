@@ -2,6 +2,7 @@ import {
   render,
   screen,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -98,6 +99,35 @@ describe("Home", () => {
       "href",
       "/bank",
     );
+  });
+
+  it("filters the apps by the search text", async () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [
+        { id: "id00000001", name: "Bank", tags: ["Cashflow Tracking"], route: "/bank", routeType: "INTERNAL" },
+        { id: "id00000002", name: "Quiz", tags: ["Games"], route: "/quiz", routeType: "INTERNAL" },
+      ],
+      isLoading: false,
+      error: undefined,
+    });
+
+    renderHome();
+    await userEvent.type(screen.getByLabelText("Search apps"), "qui");
+
+    expect(screen.getByRole("link", { name: "Quiz" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Bank" })).not.toBeInTheDocument();
+  });
+
+  it("shows no search box while the apps are loading", () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [],
+      isLoading: true,
+      error: undefined,
+    });
+
+    renderHome();
+
+    expect(screen.queryByLabelText("Search apps")).not.toBeInTheDocument();
   });
 
   it("sets the document title", () => {
