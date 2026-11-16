@@ -1,16 +1,17 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
+import {useLocation} from "react-router-dom";
 
 import Card from "../components/ui/Card.tsx";
-import AppList from "../components/apps/AppList.tsx";
-import AppSearchBar from "../components/apps/AppSearchBar.tsx";
+import AppFinder from "../components/apps/AppFinder.tsx";
 
-import {filterApps} from "../components/apps/filterApps.ts";
 import {useApps} from "../components/apps/useApps.ts";
 
 export default function Home() {
 
   const {apps, isLoading, error: appsError} = useApps();
-  const [query, setQuery] = useState("");
+  // Changes on every navigation, even a click on a link to the page we are
+  // already on. Used as a key below to soft reset the search.
+  const {key: locationKey} = useLocation();
 
   useEffect(() => {
     document.title = "Beo Base | Home";
@@ -33,10 +34,7 @@ export default function Home() {
       )}
 
       {!isLoading && !appsError && (
-        <>
-          <AppSearchBar value={query} onChange={setQuery} />
-          <AppList apps={filterApps(apps, query)} />
-        </>
+        <AppFinder key={locationKey} apps={apps} />
       )}
     </>
   );

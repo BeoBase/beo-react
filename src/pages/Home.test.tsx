@@ -3,7 +3,7 @@ import {
   screen,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { Link, MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import Home from "./Home";
@@ -109,6 +109,31 @@ describe("Home", () => {
 
     expect(screen.getByRole("link", { name: "Quiz" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Bank" })).not.toBeInTheDocument();
+  });
+
+  it("clears the search when a link to the home page is clicked again", async () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [
+        { id: "id00000001", name: "Bank", tags: ["Cashflow Tracking"], route: "/bank", routeType: "INTERNAL" },
+      ],
+      isLoading: false,
+      error: undefined,
+    });
+
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <Link to="/">Logo</Link>
+        <Home />
+      </MemoryRouter>,
+    );
+    await userEvent.type(screen.getByLabelText("Search apps"), "zzz");
+    expect(screen.getByText("No apps found.")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("link", { name: "Logo" }));
+
+    expect(screen.getByLabelText("Search apps")).toHaveValue("");
+    expect(screen.getByLabelText("Search apps")).toHaveFocus();
+    expect(screen.getByRole("link", { name: "Bank" })).toBeInTheDocument();
   });
 
   it("shows no search box while the apps are loading", () => {
