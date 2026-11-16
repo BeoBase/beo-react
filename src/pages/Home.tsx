@@ -1,16 +1,19 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 import Documentation from "../components/footer/Documentation.tsx";
 import Connect from "../components/footer/Connect.tsx";
 import Card from "../components/ui/Card.tsx";
 import AppList from "../components/apps/AppList.tsx";
+import AppSearchBar from "../components/apps/AppSearchBar.tsx";
 
+import {filterApps} from "../components/apps/filterApps.ts";
 import {useApps} from "../components/apps/useApps.ts";
 
 
 export default function Home() {
 
   const {apps, isLoading, error: appsError} = useApps();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     document.title = "Beo Base | Home";
@@ -32,7 +35,12 @@ export default function Home() {
         </Card>
       )}
 
-      {!isLoading && !appsError && <AppList apps={apps} />}
+      {!isLoading && !appsError && (
+        <>
+          <AppSearchBar value={query} onChange={setQuery} />
+          <AppList apps={filterApps(apps, query)} />
+        </>
+      )}
       
       <section className="mx-auto pb-4 mt-12 grid max-w-6xl gap-6 px-6 md:grid-cols-2">
         <Documentation />
