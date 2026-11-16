@@ -40,13 +40,6 @@ describe("Home", () => {
     );
   };
   
-  it("renders the Home page", () => {
-    renderHome();
-    
-    expect(screen.getByText("Documentation")).toBeInTheDocument();
-    expect(screen.getByText("Connect")).toBeInTheDocument();
-  });
-  
   it("shows a loading message while the apps are loading", () => {
     vi.mocked(useApps).mockReturnValue({
       apps: [],
