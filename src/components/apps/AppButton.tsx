@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import type { AppData } from "../../data/AppsData.ts";
+
+import type { AppData } from "./AppData.ts";
 
 type AppButtonProps = {
   app: AppData;
@@ -12,9 +13,9 @@ export default function AppButton({ app, className = "" }: AppButtonProps) {
     transition-all hover:bg-blue-500 hover:shadow-lg ${className}`;
 
   // Internal route -> router Link (no page reload)
-  if (app.to) {
+  if (app.routeType === "INTERNAL") {
     return (
-      <Link to={app.to} className={buttonClassName}>
+      <Link to={app.route} className={buttonClassName}>
         {app.name}
       </Link>
     );
@@ -23,7 +24,7 @@ export default function AppButton({ app, className = "" }: AppButtonProps) {
   // External link -> new tab
   return (
     <a
-      href={app.href}
+      href={app.route}
       target="_blank"
       rel="noopener noreferrer"
       className={buttonClassName}

@@ -5,9 +5,10 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import Home from "./Home";
+import { useApps } from "../components/apps/useApps.ts";
 
 vi.mock("../components/footer/Documentation.tsx", () => ({
   default: () => <div>Documentation</div>,
@@ -17,11 +18,21 @@ vi.mock("../components/footer/Connect.tsx", () => ({
   default: () => <div>Connect</div>,
 }));
 
-vi.mock("../components/infoBox/InfoBox.tsx", () => ({
-  default: ({ title }: { title: string }) => <div>{title}</div>,
+// The apps list is loaded by a hook; mock it so the "Call Spring" tests below
+// are the only ones that use fetch
+vi.mock("../components/apps/useApps.ts", () => ({
+  useApps: vi.fn(),
 }));
 
 describe("Home", () => {
+  beforeEach(() => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [],
+      isLoading: false,
+      error: undefined,
+    });
+  });
+
   const renderHome = () => {
     return render(
       <MemoryRouter>
@@ -40,6 +51,60 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
   
+  it("shows a loading message while the apps are loading", () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [],
+      isLoading: true,
+      error: undefined,
+    });
+
+    renderHome();
+
+    expect(screen.getByText("Loading apps...")).toBeInTheDocument();
+    expect(screen.queryByText("No apps found.")).not.toBeInTheDocument();
+  });
+
+  it("shows an error message when the apps cannot be loaded", () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [],
+      isLoading: false,
+      error: "Failed to fetch apps",
+    });
+
+    renderHome();
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Could not load apps: Failed to fetch apps",
+    );
+    expect(screen.queryByText("No apps found.")).not.toBeInTheDocument();
+  });
+
+  it("shows the apps from the backend grouped by tag", () => {
+    vi.mocked(useApps).mockReturnValue({
+      apps: [
+        {
+          id: "aB3xK9pQ2m",
+          name: "Bank",
+          tags: ["Cashflow Tracking"],
+          route: "/bank",
+          routeType: "INTERNAL",
+        },
+      ],
+      isLoading: false,
+      error: undefined,
+    });
+
+    renderHome();
+
+    expect(
+      screen.getByRole("heading", { name: "Cashflow Tracking" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Bank" })).toHaveAttribute(
+      "href",
+      "/bank",
+    );
+  });
+
   it("sets the document title", () => {
     renderHome();
     
