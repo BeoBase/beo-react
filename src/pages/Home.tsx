@@ -1,7 +1,5 @@
 import {useEffect, useState} from "react";
 
-import Documentation from "../components/footer/Documentation.tsx";
-import Connect from "../components/footer/Connect.tsx";
 import Card from "../components/ui/Card.tsx";
 import AppList from "../components/apps/AppList.tsx";
 import AppSearchBar from "../components/apps/AppSearchBar.tsx";
@@ -41,11 +39,6 @@ export default function Home() {
           <AppList apps={filterApps(apps, query)} />
         </>
       )}
-      
-      <section className="mx-auto pb-4 mt-12 grid max-w-6xl gap-6 px-6 md:grid-cols-2">
-        <Documentation />
-        <Connect />
-      </section>
     </>
   );
 }
